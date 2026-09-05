@@ -1,0 +1,1 @@
+const r=require('express').Router();const c=require('../controllers/projectController');r.get('/',c.list);r.get('/filters',c.filters);r.get('/:id',c.get);r.post('/:id/analysis',c.analysis);r.post('/:id/report',c.report);module.exports=r;

@@ -1,0 +1,1 @@
+Run schema.sql first, then seed.sql using psql.

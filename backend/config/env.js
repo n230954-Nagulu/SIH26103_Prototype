@@ -1,0 +1,2 @@
+require('dotenv').config();
+module.exports={PORT:Number(process.env.PORT||5000),DATABASE_URL:process.env.DATABASE_URL||'postgresql://postgres:postgres@localhost:5432/sih_gspi',ML_SERVICE_URL:process.env.ML_SERVICE_URL||'http://127.0.0.1:8001'};

@@ -1,0 +1,5 @@
+/node_modules
+.env
+/n
+ml_service/venv
+ml_service/data
