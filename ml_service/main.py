@@ -11,11 +11,18 @@ MODEL_DIR = os.path.join(BASE, 'models')
 
 
 time_model = joblib.load(
-    os.path.join(MODEL_DIR, 'time_overrun_model.pkl')
+    os.path.join(
+        MODEL_DIR,
+        'time_overrun_model.pkl'
+    )
 )
 
+
 cost_model = joblib.load(
-    os.path.join(MODEL_DIR, 'cost_overrun_model.pkl')
+    os.path.join(
+        MODEL_DIR,
+        'cost_overrun_model.pkl'
+    )
 )
 
 
@@ -37,7 +44,9 @@ FEATURES = [
 
 
 class Payload(BaseModel):
+
     sector: str
+
     implementing_agency: str
 
     original_commissioning_month: int = Field(
@@ -82,14 +91,23 @@ class Payload(BaseModel):
         le=100
     )
 
+    scenario: bool = False
+
+    baseline_manpower: int | None = None
+
+    baseline_original_cost: float | None = None
+
+    baseline_duration: int | None = None
+
 
 app = FastAPI(
     title='SIH26103 Project Risk ML Service',
-    version='2.1'
+    version='2.2'
 )
 
 
 def level(score):
+
     if score >= 60:
         return 'High'
 
@@ -100,7 +118,9 @@ def level(score):
 
 
 def impact(value):
+
     if isinstance(value, (int, float)):
+
         if value >= 8:
             return 'High'
 
@@ -118,11 +138,181 @@ def impact(value):
     return 'Low'
 
 
+def apply_scenario_adjustment(
+    x,
+    base_time_months,
+    base_cost_pct
+):
+
+    """
+    Applies management intervention logic
+    for the What-If simulator.
+
+    The trained ML models provide the
+    underlying project prediction.
+
+    Scenario controls represent changes
+    to manpower, budget and planned time.
+
+    These adjustments affect only the
+    scenario result.
+
+    The database project is never modified.
+    """
+
+    if not x.get('scenario', False):
+
+        return (
+            base_time_months,
+            base_cost_pct
+        )
+
+
+    time_months = float(
+        base_time_months
+    )
+
+    cost_pct = float(
+        base_cost_pct
+    )
+
+
+    manpower = float(
+        x['manpower']
+    )
+
+    budget = float(
+        x['original_cost_crore']
+    )
+
+    duration = float(
+        x['planned_duration_months']
+    )
+
+
+    baseline_manpower = float(
+        x.get(
+            'baseline_manpower',
+            manpower
+        ) or manpower
+    )
+
+    baseline_budget = float(
+        x.get(
+            'baseline_original_cost',
+            budget
+        ) or budget
+    )
+
+    baseline_duration = float(
+        x.get(
+            'baseline_duration',
+            duration
+        ) or duration
+    )
+
+
+    # Manpower intervention
+    # More manpower generally reduces
+    # schedule pressure.
+
+    if baseline_manpower > 0:
+
+        manpower_change = (
+            manpower -
+            baseline_manpower
+        ) / baseline_manpower
+
+        manpower_change = np.clip(
+            manpower_change,
+            -0.75,
+            4.0
+        )
+
+        time_months *= (
+            1.0 -
+            0.18 *
+            np.tanh(manpower_change)
+        )
+
+
+    # Budget intervention
+    # More available budget generally
+    # reduces financial pressure.
+
+    if baseline_budget > 0:
+
+        budget_change = (
+            budget -
+            baseline_budget
+        ) / baseline_budget
+
+        budget_change = np.clip(
+            budget_change,
+            -0.75,
+            4.0
+        )
+
+        cost_pct *= (
+            1.0 -
+            0.20 *
+            np.tanh(budget_change)
+        )
+
+        time_months *= (
+            1.0 -
+            0.05 *
+            np.tanh(budget_change)
+        )
+
+
+    # Planned duration intervention
+    # More planned time generally reduces
+    # schedule-overrun pressure.
+
+    if baseline_duration > 0:
+
+        duration_change = (
+            duration -
+            baseline_duration
+        ) / baseline_duration
+
+        duration_change = np.clip(
+            duration_change,
+            -0.75,
+            4.0
+        )
+
+        time_months *= (
+            1.0 -
+            0.15 *
+            np.tanh(duration_change)
+        )
+
+
+    time_months = max(
+        0.0,
+        time_months
+    )
+
+    cost_pct = max(
+        0.0,
+        cost_pct
+    )
+
+
+    return (
+        time_months,
+        cost_pct
+    )
+
+
 def explain(
     x,
     time_months,
     cost_pct
 ):
+
     time_months = max(
         0.0,
         float(time_months)
@@ -133,33 +323,51 @@ def explain(
         float(cost_pct)
     )
 
+
     time_pct = (
         time_months /
         max(
             1.0,
-            x['planned_duration_months']
+            float(
+                x['planned_duration_months']
+            )
         )
-        * 100.0
-    )
+    ) * 100.0
+
 
     extra_expenditure = (
-        x['original_cost_crore'] *
+        float(
+            x['original_cost_crore']
+        ) *
         cost_pct /
         100.0
     )
 
+
     score = float(
         np.clip(
-            0.45 * min(time_pct, 100) +
-            0.55 * min(cost_pct, 100),
+            0.45 *
+            min(
+                time_pct,
+                100
+            )
+            +
+            0.55 *
+            min(
+                cost_pct,
+                100
+            ),
             0,
             100
         )
     )
 
+
     risk_level = level(score)
 
+
     drivers = [
+
         {
             'label': 'Project complexity',
             'value': x['project_complexity'],
@@ -202,7 +410,8 @@ def explain(
 
         {
             'label': 'Manpower',
-            'value': f"{x['manpower']:,} personnel",
+            'value':
+                f"{x['manpower']:,} personnel",
             'impact':
                 'High'
                 if x['manpower'] < 80
@@ -212,71 +421,119 @@ def explain(
         }
     ]
 
+
     drivers.sort(
         key=lambda d: {
             'High': 3,
             'Medium': 2,
             'Low': 1
-        }[d['impact']],
+        }[
+            d['impact']
+        ],
         reverse=True
     )
 
+
     recommendations = []
 
+
     if time_pct >= 20:
+
         recommendations.append(
             'Protect the critical path and introduce a weekly schedule-recovery review.'
         )
 
+
     if cost_pct >= 15:
+
         recommendations.append(
             'Review procurement commitments, escalation exposure and remaining contingency before the next financial cycle.'
         )
 
+
     if x['manpower'] < 80:
+
         recommendations.append(
             'Review manpower allocation against the current work front and critical activities.'
         )
 
+
     if x['land_acquisition_risk'] == 'High':
+
         recommendations.append(
             'Escalate land and right-of-way dependencies with named owners and target dates.'
         )
 
+
     if x['clearance_complexity'] == 'High':
+
         recommendations.append(
             'Track statutory approvals as a dependency matrix with dated escalation points.'
         )
 
+
     if not recommendations:
+
         recommendations.append(
             'Continue monthly evidence-based monitoring and refresh the prediction after each progress report.'
         )
 
+
     return {
+
         'predicted_time_overrun_months':
-            round(time_months, 2),
+            round(
+                time_months,
+                2
+            ),
 
         'delay_time_months':
-            round(time_months, 2),
+            round(
+                time_months,
+                2
+            ),
 
         'time_overrun_pct':
-            round(time_pct, 2),
+            round(
+                time_pct,
+                2
+            ),
 
         'predicted_cost_overrun_pct':
-            round(cost_pct, 2),
+            round(
+                cost_pct,
+                2
+            ),
 
         'cost_overrun_pct':
-            round(cost_pct, 2),
+            round(
+                cost_pct,
+                2
+            ),
 
         'extra_expenditure_crore':
-            round(extra_expenditure, 2),
+            round(
+                extra_expenditure,
+                2
+            ),
 
         'predicted_cost_overrun_crore':
-            round(extra_expenditure, 2),
+            round(
+                extra_expenditure,
+                2
+            ),
 
         'risk_score':
-            round(score, 1),
+            round(
+                score,
+                1
+            ),
+
+        'risk_percentage':
+            round(
+                score,
+                1
+            ),
 
         'risk_level':
             risk_level,
@@ -288,170 +545,29 @@ def explain(
             recommendations,
 
         'model_features':
-            FEATURES
-    }
+            FEATURES,
 
-
-def apply_scenario_adjustment(
-    x,
-    base_time_months,
-    base_cost_pct
-):
-    """
-    Applies intervention logic for the What-If simulator.
-
-    The trained ML models provide the baseline prediction.
-
-    Scenario controls then represent management interventions:
-
-    More manpower:
-        reduces schedule pressure.
-
-    More budget:
-        reduces financial pressure.
-
-    More planned duration:
-        reduces time-overrun percentage.
-
-    These changes affect only the scenario prediction.
-    The database project is never modified.
-    """
-
-    time_months = float(base_time_months)
-    cost_pct = float(base_cost_pct)
-
-    manpower = float(x['manpower'])
-    budget = float(x['original_cost_crore'])
-    duration = float(x['planned_duration_months'])
-
-    # --------------------------------------------------
-    # MANPOWER EFFECT
-    # --------------------------------------------------
-    #
-    # 150 personnel is treated as a reasonable reference
-    # level for a large infrastructure project.
-    #
-    # More manpower -> lower schedule pressure.
-    #
-    manpower_reference = 150.0
-
-    manpower_ratio = (
-        manpower /
-        manpower_reference
-    )
-
-    manpower_effect = np.clip(
-        manpower_ratio - 1.0,
-        -0.6,
-        2.0
-    )
-
-    # Maximum practical reduction is approximately 25%.
-    time_months *= (
-        1.0 -
-        0.12 *
-        np.tanh(manpower_effect)
-    )
-
-
-    # --------------------------------------------------
-    # PLANNED DURATION EFFECT
-    # --------------------------------------------------
-    #
-    # More planned time gives the project more schedule
-    # buffer, therefore reducing time-overrun pressure.
-    #
-    # We compare the scenario duration against a
-    # 24-month reference.
-    #
-
-    duration_reference = 24.0
-
-    duration_ratio = (
-        duration /
-        duration_reference
-    )
-
-    duration_effect = np.clip(
-        duration_ratio - 1.0,
-        -0.75,
-        4.0
-    )
-
-    time_months *= (
-        1.0 -
-        0.10 *
-        np.tanh(duration_effect)
-    )
-
-
-    # --------------------------------------------------
-    # BUDGET EFFECT
-    # --------------------------------------------------
-    #
-    # A larger scenario budget gives more financial
-    # buffer and therefore reduces cost-overrun pressure.
-    #
-    # We compare the scenario budget against the model's
-    # original project budget.
-    #
-
-    original_budget = float(
-        x.get(
-            '_baseline_original_cost',
-            budget
-        )
-    )
-
-    if original_budget > 0:
-
-        budget_change_ratio = (
-            budget -
-            original_budget
-        ) / original_budget
-
-        budget_change_ratio = np.clip(
-            budget_change_ratio,
-            -0.75,
-            4.0
-        )
-
-        cost_pct *= (
-            1.0 -
-            0.18 *
-            np.tanh(
-                budget_change_ratio
+        'scenario':
+            bool(
+                x.get(
+                    'scenario',
+                    False
+                )
             )
-        )
-
-
-    # --------------------------------------------------
-    # SAFETY LIMITS
-    # --------------------------------------------------
-
-    time_months = max(
-        0.0,
-        time_months
-    )
-
-    cost_pct = max(
-        0.0,
-        cost_pct
-    )
-
-    return (
-        time_months,
-        cost_pct
-    )
+    }
 
 
 @app.get('/health')
 def health():
 
     return {
+
         'status': 'ok',
+
         'models_loaded': True,
+
         'training_rows': 900,
+
         'features': FEATURES
     }
 
@@ -463,24 +579,51 @@ def predict(p: Payload):
 
         x = p.model_dump()
 
+
+        # Only the actual ML features
+        # are sent to the trained models.
+
+        model_input = {
+            key: x[key]
+            for key in FEATURES
+        }
+
+
         df = pd.DataFrame(
-            [x],
+            [model_input],
             columns=FEATURES
         )
 
-        time_months = float(
+
+        # Base ML prediction
+
+        base_time_months = float(
             time_model.predict(df)[0]
         )
 
-        cost_pct = float(
+        base_cost_pct = float(
             cost_model.predict(df)[0]
         )
+
+
+        # Apply What-If intervention logic
+        # only when scenario=True.
+
+        time_months, cost_pct = (
+            apply_scenario_adjustment(
+                x,
+                base_time_months,
+                base_cost_pct
+            )
+        )
+
 
         return explain(
             x,
             time_months,
             cost_pct
         )
+
 
     except Exception as e:
 
