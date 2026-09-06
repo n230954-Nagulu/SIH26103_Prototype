@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Project Details | Project Intelligence</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #FAFAF8;
+            color: #14213D;
+        }
+
+        .topbar {
+            height: 76px;
+            background: #F1EFE9;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 35px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 10px;
+
+            background: #C46A1D;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand h2 {
+            font-size: 18px;
+        }
+
+        .brand span {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .btns-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btns-container .btn {
+            padding: 10px 16px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .btns-container .btn:nth-child(1) {
+            background: #ffc7c770;
+            color:crimson;
+            border-color: #dc2626;
+        }
+
+        .btns-container .btn:nth-child(2) {
+            background: #a6ffb9ab;
+            color: #008a12;
+            border-color: #008015;
+        }
+
+        .btns-container .btn:nth-child(3) {
+            background: #ffdec3b9;
+            color:#df8600 ;
+            border-color: #df8600;
+        }
+
+        .btns-container .btn:hover {
+            filter: brightness(0.94);
+        }
+
+        .back-btn {
+            border: 1px solid #dbe1ea;
+            background: #F1EFE9;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: 600;
+        }
+
+        .main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px 25px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 28px;
+            margin-bottom: 7px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+        }
+
+        .project-card {
+            background: #F1EFE9;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 14px;
+
+            padding: 28px;
+
+            margin-bottom: 20px;
+        }
+
+        .project-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .project-title h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .project-id {
+            color: #C46A1D;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 7px 13px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .ongoing {
+            background: #F1EFE9;
+            color: #C46A1D;
+        }
+
+        .completed {
+            background: #e9f9ef;
+            color: #2F5233;
+        }
+
+        .delayed {
+            background: #fff0f0;
+            color: #dc2626;
+        }
+
+        .details-grid {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 16px;
+        }
+
+        .detail {
+            border: 1px solid #e5e7eb;
+
+            border-radius: 10px;
+
+            padding: 16px;
+        }
+
+        .detail span {
+            display: block;
+
+            font-size: 12px;
+
+            color: #64748b;
+
+            margin-bottom: 7px;
+        }
+
+        .detail strong {
+            font-size: 15px;
+        }
+
+        .progress-section {
+            margin-top: 25px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 10px;
+
+            background: #e5e7eb;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+
+            background: #C46A1D;
+
+            border-radius: 10px;
+        }
+
+        .loading,
+        .error {
+            background: #F1EFE9;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 12px;
+
+            padding: 60px 20px;
+
+            text-align: center;
+        }
+
+        .loading i,
+        .error i {
+            font-size: 35px;
+
+            color: #C46A1D;
+
+            margin-bottom: 15px;
+        }
+
+        .error i {
+            color: #dc2626;
+        }
+
+        @media (max-width: 800px) {
+
+            .details-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .project-title {
+                flex-direction: column;
+            }
+
+        }
+
+        @media (max-width: 550px) {
+
+            .topbar {
+                padding: 15px;
+            }
+
+            .brand span {
+                display: none;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main {
+                padding: 20px 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <div>
+                <h2>Project Intelligence</h2>
+                <span>Infrastructure Monitoring System</span>
+            </div>
+
+        </div>
+
+
+        <button class="back-btn" id="backBtn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Back to Projects
+
+        </button>
+
+    </header>
+
+
+    <main class="main">
+
+        <div class="page-heading">
+
+            <h1>Project Details</h1>
+
+            <p>
+                Detailed information about the selected infrastructure project
+            </p>
+            <div class="btns-container">
+                <button class="btn btn-primary" id="riskAnalysisBtn"><span>&bull;</span> Risk Analysis</button>
+                <button class="btn btn-primary">Previous Reports</button>
+                <button class="btn btn-primary">Add Report</button>
+            </div>
+
+        </div>
+
+
+        <div id="loading" class="loading">
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            <p>Loading project details...</p>
+
+        </div>
+
+
+        <div id="error" class="error" style="display:none;">
+
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+            <h3>Project not found</h3>
+
+            <p id="errorMessage">
+                Unable to load project information.
+            </p>
+
+        </div>
+
+
+        <div id="projectContent" style="display:none;">
+
+            <section class="project-card">
+
+                <div class="project-title">
+
+                    <div>
+
+                        <h2 id="projectName">
+                            Project
+                        </h2>
+
+                        <span
+                            class="project-id"
+                            id="projectId"
+                        >
+                        </span>
+
+                    </div>
+
+
+                    <span
+                        class="status"
+                        id="projectStatus"
+                    >
+                    </span>
+
+                </div>
+
+
+                <div class="details-grid">
+
+                    <div class="detail">
+
+                        <span>Sector</span>
+
+                        <strong id="sector">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <span>Ministry</span>
+
+                        <strong id="ministry">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <span>State</span>
+
+                        <strong id="state">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <span>Total Budget</span>
+
+                        <strong id="budget">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <span>Expenditure</span>
+
+                        <strong id="expenditure">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <span>Start Date</span>
+
+                        <strong id="startDate">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <span>End Date</span>
+
+                        <strong id="endDate">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="progress-section">
+
+                    <div class="progress-header">
+
+                        <strong>
+                            Project Progress
+                        </strong>
+
+                        <strong id="progressText">
+                            0%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            id="progressFill"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script src="project-view.js"></script>
+
+</body>
+
+</html>

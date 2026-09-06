@@ -1,0 +1,16 @@
+{
+  "name": "sih26-project-monitoring",
+  "version": "1.0.0",
+  "description": "SIH 26103 Integrated Project Monitoring Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.3",
+    "pg": "^8.16.3"
+  }
+}

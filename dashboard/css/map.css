@@ -1,0 +1,183 @@
+:root{
+    --bg: #FAFAF8;
+    --panel-bg: #FFFFFF;
+    --ink: #14213D;
+    --muted: #536070;
+    --accent: #C46A1D;
+    --accent-soft: #F1EFE9;
+    --state-fill: #d8d3c7;
+    --state-stroke: #FAFAF8;
+    --state-hover: #C46A1D;
+    --state-selected: #2F5233;
+}
+  .wrap {
+    display: flex;
+    gap: 24px;
+    padding: 20px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .map-card {
+    background: var(--panel-bg);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    flex: 1 1 480px;
+    min-width: 320px;
+  }
+  .map-card h1 {
+    font-size: 18px;
+    margin: 0 0 4px 0;
+  }
+  .map-card p.hint {
+    margin: 0 0 12px 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  svg#india-map {
+    width: 72%;
+    height: auto;
+    display: block;
+  }
+  svg#india-map path {
+    fill: var(--state-fill);
+    stroke: var(--state-stroke);
+    stroke-width: 1;
+    cursor: pointer;
+    transition: fill 0.15s ease, transform 0.15s ease;
+    transform-origin: center;
+  }
+  svg#india-map path:hover {
+    fill: var(--state-hover);
+  }
+  svg#india-map path:focus{
+    fill : var(--state-hover);
+  }
+  svg#india-map path.selected {
+    fill: var(--state-selected);
+  }
+  .tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: var(--ink);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    z-index: 10;
+    white-space: nowrap;
+  }
+  .panel {
+    background: var(--panel-bg);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    flex: 1 1 300px;
+    min-width: 280px;
+    max-width: 380px;
+  }
+  .panel .placeholder {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .panel .placeholder .big-emoji {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .panel h2 {
+    margin: 0 0 4px 0;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .panel .type-badge {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: #14213D;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .panel .field {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .panel .field .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    font-weight: 700;
+  }
+  .panel .field .value {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    line-height: 1.2;
+    color: var(--color-navy);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .panel .blurb {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+    padding-top: 14px;
+    margin-top: 4px;
+  }
+  .panel .blurb p {
+    margin-bottom: 18px;
+  }
+  .panel .close-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  .panel .close-btn:hover { color: var(--ink); }
+
+  .map-project-container{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .map-project-container .field {
+    min-width: 0;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-section);
+  }
+  .map-project-container .field:nth-child(even) {
+    border-top-color: var(--state-selected);
+  }
+  .map-project-container .field:nth-child(odd) {
+    border-top-color: var(--accent);
+  }
+.map-project-container .value {
+     overflow-wrap: anywhere;
+}
+
+.value{
+    color: var(--color-navy);
+}
+
+@media (max-width: 420px) {
+    .map-project-container {
+        grid-template-columns: 1fr;
+    }
+}

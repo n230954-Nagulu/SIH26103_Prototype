@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | Project Intelligence</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="login.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="login-page">
+
+
+    <!-- =================================================
+         LEFT SIDE
+    ================================================== -->
+
+    <section class="login-info">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+
+                <i class="fa-solid fa-building-columns"></i>
+
+            </div>
+
+            <div>
+
+                <h2>Project Intelligence</h2>
+
+                <span>
+                    Infrastructure Monitoring System
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="info-content">
+
+            <div class="large-icon">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+            </div>
+
+
+            <h1>
+                Smart Infrastructure
+                Monitoring
+            </h1>
+
+
+            <p>
+                A unified platform for monitoring
+                government infrastructure projects,
+                tracking progress and identifying
+                project risks.
+            </p>
+
+
+            <div class="features">
+
+                <div>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Real-time project monitoring
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Planned vs actual analysis
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-circle-check"></i>
+                    AI-powered project intelligence
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Early risk identification
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         RIGHT SIDE
+    ================================================== -->
+
+    <section class="login-container">
+
+
+        <div class="login-card">
+
+
+            <!-- Mobile brand -->
+
+            <div class="mobile-brand">
+
+                <div class="brand-icon">
+
+                    <i class="fa-solid fa-building-columns"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>Project Intelligence</h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- Heading -->
+
+            <div class="login-heading">
+
+                <h1>
+                    Welcome Back
+                </h1>
+
+                <p>
+                    Login to access the
+                    Project Intelligence Platform.
+                </p>
+
+            </div>
+
+
+            <!-- Role -->
+
+            <div class="role-selection">
+
+
+                <div
+                    id="governmentRole"
+                    class="role-btn active"
+                >
+
+                    <i class="fa-solid fa-building-columns"></i>
+
+                    <div>
+
+                        <strong>
+                            Government Officer
+                        </strong>
+
+                        <small>
+                            Monitor government projects
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="contractorRole"
+                    class="role-btn"
+                >
+
+                    <i class="fa-solid fa-helmet-safety"></i>
+
+                    <div>
+
+                        <strong>
+                            Contractor
+                        </strong>
+
+                        <small>
+                            Manage assigned projects
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- Login form -->
+
+            <form id="loginForm">
+
+
+                <div class="form-group">
+
+                    <label id="loginLabel">
+                        Officer ID or Official Email
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="login"
+                            placeholder="Enter Officer ID or official email"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-lock"></i>
+
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="password-toggle"
+                            aria-label="Show password"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="errorMessage"
+                    class="error-message"
+                ></div>
+
+
+                <button
+                    type="submit"
+                    class="login-submit login-button"
+                >
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                    Login
+
+                </button>
+
+
+            </form>
+
+
+            <!-- Government registration -->
+
+            <div
+                id="governmentRegister"
+                class="register-link"
+            >
+
+                Don't have a government account?
+
+                <a
+                    href="../register/register.html?role=government"
+                >
+                    Create Government Officer Account
+                </a>
+
+            </div>
+
+
+            <!-- Contractor registration -->
+
+            <div
+                id="contractorRegister"
+                class="register-link"
+                style="display:none;"
+            >
+
+                Don't have a contractor account?
+
+                <a
+                    href="../register/register.html?role=contractor"
+                >
+                    Create Contractor Account
+                </a>
+
+            </div>
+
+
+            <!-- Back -->
+
+            <div class="back-home">
+
+                <a href="../index.html">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back to Home
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script src="login.js"></script>
+
+</body>
+
+</html>

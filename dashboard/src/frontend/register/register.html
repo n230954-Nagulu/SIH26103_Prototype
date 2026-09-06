@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | Project Intelligence</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="register.css">
+</head>
+
+<body>
+
+    <div class="register-page">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    <i class="fa-solid fa-building-columns"></i>
+                </div>
+
+                <div>
+                    <h2>Project Intelligence</h2>
+                    <span>Infrastructure Monitoring System</span>
+                </div>
+
+            </div>
+
+            <a href="../login/login.html" class="back-login">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to Login
+            </a>
+
+        </header>
+
+
+        <!-- MAIN -->
+        <main class="main-container">
+
+            <div class="register-card">
+
+                <!-- HEADING -->
+                <div class="heading">
+
+                    <div class="heading-icon">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+
+                    <div>
+                        <h1 id="pageTitle">
+                            Create Government Officer Account
+                        </h1>
+
+                        <p id="pageSubtitle">
+                            Register your government officer account
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+                <div id="message" class="message"></div>
+
+
+                <!-- FORM -->
+                <form id="registerForm">
+
+
+                    <!-- GOVERNMENT FIELDS -->
+                    <div id="governmentFields">
+
+                        <!-- OFFICER ID -->
+                        <div class="form-group">
+
+                            <label for="officer_id">
+                                Officer ID
+                                <span>*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-id-card"></i>
+
+                                <input
+                                    type="text"
+                                    id="officer_id"
+                                    placeholder="Enter Officer ID"
+                                    maxlength="20"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DESIGNATION -->
+                        <div class="form-group">
+
+                            <label for="designation">
+                                Designation
+                                <span>*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-user-tie"></i>
+
+                                <input
+                                    type="text"
+                                    id="designation"
+                                    placeholder="Enter your designation"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DEPARTMENT -->
+                        <div class="form-group">
+
+                            <label for="department">
+                                Department
+                                <span>*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-building"></i>
+
+                                <input
+                                    type="text"
+                                    id="department"
+                                    placeholder="Enter department"
+                                    maxlength="150"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FULL NAME -->
+                    <div class="form-group">
+
+                        <label for="full_name">
+                            Full Name
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <input
+                                type="text"
+                                id="full_name"
+                                placeholder="Enter your full name"
+                                maxlength="100"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PHONE -->
+                    <div class="form-group">
+
+                        <label for="phone">
+                            Phone Number
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-phone"></i>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                placeholder="Enter 10-digit phone number"
+                                maxlength="10"
+                                inputmode="numeric"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONTRACTOR FIELDS -->
+                    <div id="contractorFields" style="display:none;">
+
+                        <!-- COMPANY NAME -->
+                        <div class="form-group">
+
+                            <label for="company_name">
+                                Company Name
+                                <span>*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-building"></i>
+
+                                <input
+                                    type="text"
+                                    id="company_name"
+                                    placeholder="Enter company name"
+                                    maxlength="150"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CONTRACTOR ID -->
+                        <div class="form-group">
+
+                            <label for="contractor_id">
+                                Contractor ID
+                                <span>*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-id-card"></i>
+
+                                <input
+                                    type="text"
+                                    id="contractor_id"
+                                    placeholder="Enter Contractor ID"
+                                    maxlength="20"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="form-group">
+
+                        <label for="email" id="emailLabel">
+                            Official Email
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="Enter official email"
+                                maxlength="150"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper password-wrapper">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="Create password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="togglePassword"
+                            >
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONFIRM PASSWORD -->
+                    <div class="form-group">
+
+                        <label for="confirmPassword">
+                            Confirm Password
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper password-wrapper">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                placeholder="Confirm your password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="toggleConfirmPassword"
+                            >
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- REGISTER BUTTON -->
+                    <button
+                        type="submit"
+                        class="register-btn"
+                        id="registerBtn"
+                    >
+
+                        <i class="fa-solid fa-user-plus"></i>
+
+                        <span>Create Account</span>
+
+                    </button>
+
+                </form>
+
+
+                <!-- LOGIN LINK -->
+                <div class="login-link">
+
+                    Already have an account?
+
+                    <a href="../login/login.html">
+                        Login here
+                    </a>
+
+                </div>
+
+
+                <!-- NOTE -->
+                <div class="note">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    <span>
+                        Your account information is securely stored in
+                        the Project Intelligence system. Fields marked
+                        with * are required.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <script src="register.js"></script>
+
+</body>
+
+</html>

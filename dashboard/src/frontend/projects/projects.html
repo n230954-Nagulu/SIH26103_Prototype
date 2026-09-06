@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Projects | Project Intelligence</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="projects.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="fa-solid fa-building-columns"></i>
+        </div>
+
+        <div>
+            <h2>Project Intelligence</h2>
+            <span>Infrastructure Monitoring System</span>
+        </div>
+    </div>
+
+    <nav class="top-nav">
+
+        <button class="nav-btn home-btn" id="homeBtn">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </button>
+
+        <!-- Public Login button -->
+        <button class="nav-btn login-btn" id="loginBtn">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Login</span>
+        </button>
+
+        <!-- Government only -->
+        <button class="nav-btn add-project-btn" id="addProjectBtn">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add Project</span>
+        </button>
+
+        <!-- Logged-in users -->
+        <button class="nav-btn logout-btn" id="logoutBtn">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+        </button>
+
+    </nav>
+
+</header>
+
+
+<main class="main-container">
+
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+
+        <div class="page-title-row">
+
+            <div class="page-title-icon">
+                <i class="fa-solid fa-folder-open"></i>
+            </div>
+
+            <div>
+                <h1 id="pageTitle">Government Projects</h1>
+
+                <p id="pageSubtitle">
+                    Explore infrastructure and development projects
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="user-info" id="userInfo">
+
+            <div class="user-avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div>
+                <strong id="userName">User</strong>
+                <span id="userRole">User</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+    <section class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon blue">
+                <i class="fa-solid fa-folder"></i>
+            </div>
+
+            <div>
+                <span>Total Projects</span>
+                <strong id="totalProjects">0</strong>
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon green">
+                <i class="fa-solid fa-spinner"></i>
+            </div>
+
+            <div>
+                <span>Ongoing Projects</span>
+                <strong id="ongoingProjects">0</strong>
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon red">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+
+            <div>
+                <span>Delayed Projects</span>
+                <strong id="delayedProjects">0</strong>
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon purple">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+            </div>
+
+            <div>
+                <span>Total Budget</span>
+                <strong id="totalBudget">₹0</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FILTERS -->
+    <section class="filter-section">
+
+        <div class="filter-title">
+            <i class="fa-solid fa-filter"></i>
+            Filter Projects
+        </div>
+
+        <div class="filters">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search project ID, name, sector..."
+                >
+
+            </div>
+
+
+            <select id="sectorFilter">
+                <option value="">All Sectors</option>
+            </select>
+
+
+            <button class="search-btn" id="searchBtn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                Search
+            </button>
+
+
+            <button class="reset-btn" id="resetBtn">
+                <i class="fa-solid fa-rotate-left"></i>
+                Reset
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROJECT LIST -->
+    <section class="projects-section">
+
+        <div class="table-header">
+
+            <div>
+                <h2>Project List</h2>
+                <span id="projectCount">0 projects</span>
+            </div>
+
+        </div>
+
+
+        <!-- LOADING -->
+        <div class="loading-state" id="loadingState">
+
+            <div class="loader"></div>
+
+            <h3>Loading Projects</h3>
+
+            <p>Please wait while project information is being loaded.</p>
+
+        </div>
+
+
+        <!-- ERROR -->
+        <div class="error-state" id="errorState">
+
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+            <h3>Unable to load projects</h3>
+
+            <p id="errorMessage">
+                Something went wrong.
+            </p>
+
+            <button id="retryBtn">
+                <i class="fa-solid fa-rotate-right"></i>
+                Try Again
+            </button>
+
+        </div>
+
+
+        <!-- EMPTY -->
+        <div class="empty-state" id="emptyState">
+
+            <i class="fa-solid fa-folder-open"></i>
+
+            <h3>No projects found</h3>
+
+            <p>
+                There are no projects matching your search.
+            </p>
+
+        </div>
+
+
+        <!-- TABLE -->
+        <div class="table-container" id="tableContainer">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>#</th>
+                        <th>PROJECT ID</th>
+                        <th>PROJECT NAME</th>
+                        <th>SECTOR</th>
+                        <th>BUDGET</th>
+                        <th>PROGRESS</th>
+                        <th>STATUS</th>
+                        <th>ACTION</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="projectsTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script src="projects.js"></script>
+
+</body>
+</html>
