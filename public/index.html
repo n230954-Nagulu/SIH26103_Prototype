@@ -5,9 +5,10 @@
 <title>Government Project Intelligence</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/css/navigation.css">
 </head>
 <body>
-<header class="top"><div class="brand"><div class="brandmark">GI</div><div><b>Government Project Intelligence</b><small>Geo-Spatial Monitoring • SIH26103</small></div></div><div class="top-actions"><span class="live"><i></i> Monitoring Console</span></div></header>
+<header class="top"><div class="brand"><div class="brandmark">GI</div><div><b>Government Project Intelligence</b><small>Geo-Spatial Monitoring • SIH26103</small></div></div><nav class="nav" aria-label="Primary navigation"><a class="nav-link active" href="/">Dashboard</a></nav><div class="top-actions"><span class="live"><i></i> Officer access required</span></div></header>
 <main class="container">
 <section class="hero"><div><p class="eyebrow">GEO-SPATIAL INTELLIGENCE</p><h1>Project monitoring, mapped and model-driven.</h1><p>Filter the national project portfolio, inspect the filtered projects on the map, and open full intelligence only when a project is selected.</p></div><div class="hero-stat"><strong id="totalCount">—</strong><span>projects in view</span></div></section>
 <section class="panel filters"><div class="panel-head"><div><h2>Portfolio filters</h2><span>Build a focused project set before mapping it.</span></div><button class="btn secondary" id="resetBtn">Reset</button></div><div class="filter-grid"><label>Sector<select id="sector"><option value="">All sectors</option></select></label><label>State<select id="state"><option value="">All states</option></select></label><label>Ministry<select id="ministry"><option value="">All ministries</option></select></label><label>Risk<select id="risk_level"><option value="">All risk levels</option><option>High</option><option>Medium</option><option>Low</option></select></label><label>Project type<select id="project_type"><option value="">All types</option></select></label><label>Search<input id="search" placeholder="Project name or ID"></label></div><button class="btn primary" id="filterBtn">Apply filters</button></section>

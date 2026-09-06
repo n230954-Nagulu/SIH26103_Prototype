@@ -5,6 +5,22 @@ let selectedMarker = null;
 
 const $ = id => document.getElementById(id);
 
+function requireOfficerAccess() {
+    try {
+        const session = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+
+        if (session && session.role === 'government') {
+            return true;
+        }
+    } catch (error) {
+        localStorage.removeItem('loggedInUser');
+    }
+
+    const redirect = encodeURIComponent('/geospatial');
+    window.location.replace(`/dashboard/src/frontend/login/login.html?redirect=${redirect}`);
+    return false;
+}
+
 async function api(url, opt) {
     const r = await fetch(url, opt);
     const j = await r.json();
@@ -367,6 +383,10 @@ function closeDrawer() {
 }
 
 function init() {
+    if (!requireOfficerAccess()) {
+        return;
+    }
+
     map = L
         .map('portfolioMap')
         .setView([22.5, 79], 3);

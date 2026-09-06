@@ -1,40 +1,89 @@
-let p, analysis = null, scenario = null, pm, scenarioTimer;
+let p;
+let analysis = null;
+let scenario = null;
+let pm;
+let scenarioTimer;
+
 const $ = id => document.getElementById(id);
-const id = new URLSearchParams(location.search).get('id');
+
+const id = new URLSearchParams(
+    location.search
+).get('id');
+
+const isAnalysisPage =
+    location.pathname.endsWith('/project-analysis.html');
+
+function requireOfficerAccess() {
+    try {
+        const session = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+
+        if (session && session.role === 'government') {
+            return true;
+        }
+    } catch (error) {
+        localStorage.removeItem('loggedInUser');
+    }
+
+    const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+    window.location.replace(`/dashboard/src/frontend/login/login.html?redirect=${redirect}`);
+    return false;
+}
+
 
 async function api(url, opt) {
-    const r = await fetch(url, opt);
+    const r = await fetch(
+        url,
+        opt
+    );
+
     const j = await r.json();
 
     if (!r.ok) {
-        throw Error(j.message || j.detail || 'Request failed');
+        throw Error(
+            j.message ||
+            j.detail ||
+            'Request failed'
+        );
     }
 
     return j;
 }
 
+
 function esc(s) {
-    return String(s ?? '').replace(/[&<>"']/g, c => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-    }[c]));
+    return String(
+        s ?? ''
+    ).replace(
+        /[&<>"']/g,
+        c => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[c])
+    );
 }
 
+
 function rc(x) {
-    return x === 'High' ? 'high' :
-        x === 'Medium' ? 'medium' :
-        'low';
+    return x === 'High'
+        ? 'high'
+        : x === 'Medium'
+            ? 'medium'
+            : 'low';
 }
+
 
 function render() {
     $('loading').hidden = true;
     $('content').hidden = false;
 
-    $('code').textContent = p.project_code;
-    $('name').textContent = p.name;
+    $('code').textContent =
+        p.project_code;
+
+    $('name').textContent =
+        p.name;
 
     $('meta').textContent =
         `${p.place}, ${p.state} • ${p.sector} • ${p.ministry}`;
@@ -43,33 +92,64 @@ function render() {
         `risk-badge ${rc(p.risk_level)}`;
 
     $('riskBadge').textContent =
-        `${Number(p.risk_percentage || 0).toFixed(0)}% registry risk`;
+        `${Number(
+            p.risk_percentage || 0
+        ).toFixed(0)}% registry risk`;
 
     $('details').innerHTML = [
-        ['Project ID', p.project_code],
-        ['Type', p.project_type],
-        ['Implementing agency', p.implementing_agency],
+        [
+            'Project ID',
+            p.project_code
+        ],
+
+        [
+            'Type',
+            p.project_type
+        ],
+
+        [
+            'Implementing agency',
+            p.implementing_agency
+        ],
+
         [
             'Original cost',
-            `₹${Number(p.original_cost_crore).toLocaleString('en-IN')} crore`
+            `₹${Number(
+                p.original_cost_crore
+            ).toLocaleString(
+                'en-IN'
+            )} crore`
         ],
+
         [
             'Planned duration',
             `${p.planned_duration_months} months`
         ],
+
         [
             'Current progress',
             `${p.progress_pct}%`
         ],
+
         [
             'Manpower',
-            Number(p.manpower).toLocaleString('en-IN')
+            Number(
+                p.manpower
+            ).toLocaleString(
+                'en-IN'
+            )
         ],
-        ['Contractor', p.contractor_name],
+
+        [
+            'Contractor',
+            p.contractor_name
+        ],
+
         [
             'Officer',
             `${p.officer_name} • ${p.officer_designation}`
         ],
+
         [
             'Coordinates',
             `${p.latitude}, ${p.longitude}`
@@ -93,9 +173,16 @@ function render() {
                     >
 
                     <figcaption>
-                        ${esc(x.caption || 'Site evidence')}
+                        ${esc(
+                            x.caption ||
+                            'Site evidence'
+                        )}
+
                         <small>
-                            ${esc(x.captured_at || '')}
+                            ${esc(
+                                x.captured_at ||
+                                ''
+                            )}
                         </small>
                     </figcaption>
                 </figure>
@@ -106,14 +193,18 @@ function render() {
     pm = L
         .map('projectMap')
         .setView(
-            [Number(p.latitude), Number(p.longitude)],
+            [
+                Number(p.latitude),
+                Number(p.longitude)
+            ],
             8
         );
 
     L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         {
-            attribution: '© OpenStreetMap contributors'
+            attribution:
+                '© OpenStreetMap contributors'
         }
     ).addTo(pm);
 
@@ -133,6 +224,7 @@ function render() {
     bindScenario();
 }
 
+
 function fillScenario() {
     const manpower = Math.max(
         20,
@@ -146,7 +238,9 @@ function fillScenario() {
         150,
         Math.min(
             50000,
-            Number(p.original_cost_crore) || 500
+            Number(
+                p.original_cost_crore
+            ) || 500
         )
     );
 
@@ -154,55 +248,93 @@ function fillScenario() {
         6,
         Math.min(
             120,
-            Number(p.planned_duration_months) || 24
+            Number(
+                p.planned_duration_months
+            ) || 24
         )
     );
 
-    $('sManpower').value = manpower;
-    $('sBudget').value = budget;
-    $('sDuration').value = duration;
+    $('sManpower').value =
+        manpower;
+
+    $('sBudget').value =
+        budget;
+
+    $('sDuration').value =
+        duration;
 
     updateSliderLabels();
 }
 
+
 function updateSliderLabels() {
     $('manpowerValue').textContent =
-        `${Number($('sManpower').value).toLocaleString('en-IN')} personnel`;
+        `${Number(
+            $('sManpower').value
+        ).toLocaleString(
+            'en-IN'
+        )} personnel`;
 
     $('budgetValue').textContent =
-        `₹${Number($('sBudget').value).toLocaleString('en-IN')} Cr`;
+        `₹${Number(
+            $('sBudget').value
+        ).toLocaleString(
+            'en-IN'
+        )} Cr`;
 
     $('durationValue').textContent =
         `${$('sDuration').value} months`;
 }
 
+
 function featureValues() {
     return {
-        sector: p.sector,
+        sector:
+            p.sector,
 
         implementing_agency:
             p.implementing_agency,
 
         original_commissioning_month:
-            Number(p.original_commissioning_month),
+            Number(
+                p.original_commissioning_month
+            ),
 
         original_commissioning_year:
-            Number(p.original_commissioning_year),
+            Number(
+                p.original_commissioning_year
+            ),
+
+        /*
+         * What-If controls
+         */
 
         original_cost_crore:
-            Number($('sBudget').value),
+            Number(
+                $('sBudget').value
+            ),
 
         planned_duration_months:
-            Number($('sDuration').value),
+            Number(
+                $('sDuration').value
+            ),
 
         manpower:
-            Number($('sManpower').value),
+            Number(
+                $('sManpower').value
+            ),
+
+        /*
+         * Fixed project characteristics
+         */
 
         project_scale:
             p.project_scale,
 
         project_complexity:
-            Number(p.project_complexity),
+            Number(
+                p.project_complexity
+            ),
 
         land_acquisition_risk:
             p.land_acquisition_risk,
@@ -214,81 +346,128 @@ function featureValues() {
             p.procurement_complexity,
 
         progress_pct:
-            Number(p.progress_pct)
+            Number(
+                p.progress_pct
+            )
     };
 }
 
-async function runAnalysis(features, scenario = false) {
-    return (
-        await api(
-            `/api/projects/${id}/analysis`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    ...features,
-                    scenario
-                })
-            }
-        )
-    ).data;
+
+async function runAnalysis(
+    features = {},
+    scenario = false
+) {
+    const result = await api(
+        `/api/projects/${id}/analysis`,
+        {
+            method: 'POST',
+
+            headers: {
+                'Content-Type':
+                    'application/json'
+            },
+
+            body: JSON.stringify({
+                ...features,
+                scenario
+            })
+        }
+    );
+
+    return result.data;
 }
+
 
 function renderMetrics(a) {
     $('riskScore').textContent =
-        `${a.risk_score}%`;
+        `${Number(
+            a.risk_score
+        ).toFixed(1)}%`;
 
     $('riskLevel').textContent =
         a.risk_level;
 
     $('costOverrun').textContent =
-        `${a.cost_overrun_pct}%`;
+        `${Number(
+            a.cost_overrun_pct
+        ).toFixed(1)}%`;
 
     $('extraExpenditure').textContent =
-        `₹${Number(a.extra_expenditure_crore).toLocaleString('en-IN')}`;
+        `₹${Number(
+            a.extra_expenditure_crore
+        ).toLocaleString(
+            'en-IN'
+        )}`;
 
     $('timeOverrun').textContent =
-        `${a.time_overrun_pct}%`;
+        `${Number(
+            a.time_overrun_pct
+        ).toFixed(1)}%`;
 
     $('delayTime').textContent =
-        `${a.delay_time_months} mo`;
+        `${Number(
+            a.delay_time_months
+        ).toFixed(1)} mo`;
 
     $('riskMeterFill').style.width =
-        `${Math.min(100, a.risk_score)}%`;
+        `${Math.min(
+            100,
+            Number(a.risk_score) || 0
+        )}%`;
 
     $('riskSummary').textContent =
-        `${a.risk_level} exposure: ${a.risk_score}% total risk, driven by predicted schedule and financial impact.`;
+        `${a.risk_level} exposure: ` +
+        `${Number(
+            a.risk_score
+        ).toFixed(1)}% total risk, ` +
+        `driven by predicted schedule ` +
+        `and financial impact.`;
 
     $('costBar').style.width =
-        `${Math.min(100, a.cost_overrun_pct)}%`;
+        `${Math.min(
+            100,
+            Number(a.cost_overrun_pct) || 0
+        )}%`;
 
     $('timeBar').style.width =
-        `${Math.min(100, a.time_overrun_pct)}%`;
+        `${Math.min(
+            100,
+            Number(a.time_overrun_pct) || 0
+        )}%`;
 
     $('delayBar').style.width =
         `${Math.min(
             100,
-            a.delay_time_months /
-            Math.max(
-                1,
-                Number(p.planned_duration_months)
-            ) *
-            100
+            (
+                Number(
+                    a.delay_time_months
+                ) /
+                Math.max(
+                    1,
+                    Number(
+                        p.planned_duration_months
+                    )
+                )
+            ) * 100
         )}%`;
 
     $('costBarValue').textContent =
-        `${a.cost_overrun_pct}%`;
+        `${Number(
+            a.cost_overrun_pct
+        ).toFixed(1)}%`;
 
     $('timeBarValue').textContent =
-        `${a.time_overrun_pct}%`;
+        `${Number(
+            a.time_overrun_pct
+        ).toFixed(1)}%`;
 
     $('delayBarValue').textContent =
-        `${a.delay_time_months} mo`;
+        `${Number(
+            a.delay_time_months
+        ).toFixed(1)} mo`;
 
     $('drivers').innerHTML =
-        a.drivers
+        (a.drivers || [])
             .slice(0, 5)
             .map(d => `
                 <div class="driver">
@@ -297,7 +476,9 @@ function renderMetrics(a) {
                         <span>${esc(d.value)}</span>
                     </div>
 
-                    <strong class="pill ${rc(d.impact)}">
+                    <strong class="pill ${rc(
+                        d.impact
+                    )}">
                         ${esc(d.impact)}
                     </strong>
                 </div>
@@ -305,66 +486,102 @@ function renderMetrics(a) {
             .join('');
 
     $('recommendations').innerHTML =
-        a.recommendations
+        (a.recommendations || [])
             .map(x => `
                 <li>${esc(x)}</li>
             `)
             .join('');
 }
 
-function renderAnalysis() {
-    $('analysisEmpty').hidden = true;
-    $('analysisView').hidden = false;
 
-    renderMetrics(analysis);
+function renderAnalysis() {
+    $('analysisEmpty').hidden =
+        true;
+
+    $('analysisView').hidden =
+        false;
+
+    renderMetrics(
+        analysis
+    );
 }
+
 
 async function updateScenario() {
     updateSliderLabels();
 
     try {
         /*
-         * If baseline analysis has not been generated yet,
-         * calculate it first.
+         * Generate the baseline analysis first
+         * if it has not already been generated.
          */
 
         if (!analysis) {
-            analysis = await runAnalysis({});
+            analysis =
+                await runAnalysis(
+                    {},
+                    false
+                );
         }
 
         /*
-         * Create a NEW feature set from the slider values.
-         * This does not modify the actual project in the database.
+         * Read the three What-If controls.
+         *
+         * This creates a new feature object.
+         * It does NOT modify the database.
          */
 
-        const features = featureValues();
+        const features =
+            featureValues();
 
-        scenario = await runAnalysis(features);
+        /*
+         * IMPORTANT:
+         *
+         * scenario MUST be true here.
+         *
+         * This tells the ML service to apply
+         * the What-If adjustment logic.
+         */
 
-        $('scenarioResult').hidden = false;
+        scenario =
+            await runAnalysis(
+                features,
+                true
+            );
+
+        $('scenarioResult').hidden =
+            false;
 
         /*
          * Baseline risk
          */
 
         $('baseRisk').textContent =
-            `${analysis.risk_score}%`;
+            `${Number(
+                analysis.risk_score
+            ).toFixed(1)}%`;
 
         /*
          * Scenario risk
          */
 
         $('scenarioRisk').textContent =
-            `${scenario.risk_score}%`;
+            `${Number(
+                scenario.risk_score
+            ).toFixed(1)}%`;
 
         /*
-         * Difference between scenario and baseline.
+         * Risk difference
          */
 
         const d = Number(
             (
-                scenario.risk_score -
-                analysis.risk_score
+                Number(
+                    scenario.risk_score
+                ) -
+                Number(
+                    analysis.risk_score
+                )
             ).toFixed(1)
         );
 
@@ -383,179 +600,322 @@ async function updateScenario() {
          */
 
         $('scCost').textContent =
-            `${scenario.cost_overrun_pct}%`;
+            `${Number(
+                scenario.cost_overrun_pct
+            ).toFixed(1)}%`;
 
         $('scExtra').textContent =
             `₹${Number(
                 scenario.extra_expenditure_crore
-            ).toLocaleString('en-IN')} Cr`;
+            ).toLocaleString(
+                'en-IN'
+            )} Cr`;
 
         /*
          * Scenario time impact
          */
 
         $('scTime').textContent =
-            `${scenario.time_overrun_pct}%`;
+            `${Number(
+                scenario.time_overrun_pct
+            ).toFixed(1)}%`;
 
         $('scDelay').textContent =
-            `${scenario.delay_time_months} mo`;
+            `${Number(
+                scenario.delay_time_months
+            ).toFixed(1)} mo`;
 
     } catch (e) {
         console.error(
             'Scenario calculation failed:',
             e
         );
+
+        $('scenarioResult').hidden =
+            false;
+
+        $('riskChange').textContent =
+            'Calculation failed';
+
+        $('riskChange').className =
+            'bad';
     }
 }
+
 
 function bindScenario() {
     [
         'sManpower',
         'sBudget',
         'sDuration'
-    ].forEach(id => {
-        $(id).addEventListener(
+    ].forEach(controlId => {
+        $(controlId).addEventListener(
             'input',
             () => {
-                clearTimeout(scenarioTimer);
-
-                scenarioTimer = setTimeout(
-                    updateScenario,
-                    250
+                clearTimeout(
+                    scenarioTimer
                 );
+
+                scenarioTimer =
+                    setTimeout(
+                        updateScenario,
+                        250
+                    );
             }
         );
     });
 
-    $('resetScenario').onclick = () => {
-        fillScenario();
-        updateScenario();
-    };
+    $('resetScenario').onclick =
+        () => {
+            fillScenario();
+
+            updateScenario();
+        };
 }
 
+
 async function main() {
+    if (!requireOfficerAccess()) {
+        return;
+    }
+
     try {
+        /*
+         * Load project details
+         */
+
         p = (
             await api(
-                '/api/projects/' + id
+                '/api/projects/' +
+                id
             )
         ).data;
 
+        /*
+         * Render project page
+         */
+
         render();
 
-        $('analysisBtn').onclick = async () => {
-            try {
-                $('analysisBtn').disabled = true;
-                $('analysisBtn').textContent =
-                    'Running model…';
+        /*
+         * Get Analysis button
+         */
 
-                /*
-                 * Run baseline using the actual
-                 * project values.
-                 */
+        $('analysisBtn').onclick =
+            async () => {
+                if (!isAnalysisPage) {
+                    window.location.href =
+                        `/pages/project-analysis.html?id=${encodeURIComponent(id)}`;
 
-                analysis = await runAnalysis();
-
-                renderAnalysis();
-
-                /*
-                 * Then calculate the current
-                 * What-If scenario.
-                 */
-
-                await updateScenario();
-
-            } catch (e) {
-                alert(e.message);
-            } finally {
-                $('analysisBtn').disabled = false;
-                $('analysisBtn').textContent =
-                    'Get Analysis';
-            }
-        };
-
-        $('downloadBtn').onclick = async () => {
-            try {
-                $('downloadBtn').disabled = true;
-
-                const currentFeatures =
-                    featureValues();
-
-                const body = {
-                    features: currentFeatures,
-
-                    scenario: scenario
-                        ? {
-                            ...scenario,
-
-                            features:
-                                currentFeatures,
-
-                            manpower:
-                                Number(
-                                    $('sManpower').value
-                                ),
-
-                            original_cost_crore:
-                                Number(
-                                    $('sBudget').value
-                                ),
-
-                            planned_duration_months:
-                                Number(
-                                    $('sDuration').value
-                                )
-                        }
-                        : null
-                };
-
-                const r = await fetch(
-                    `/api/projects/${id}/report`,
-                    {
-                        method: 'POST',
-
-                        headers: {
-                            'Content-Type':
-                                'application/json'
-                        },
-
-                        body:
-                            JSON.stringify(body)
-                    }
-                );
-
-                if (!r.ok) {
-                    throw Error(
-                        'Could not generate PDF'
-                    );
+                    return;
                 }
 
-                const blob = await r.blob();
+                try {
+                    $('analysisBtn').disabled =
+                        true;
 
-                const a =
-                    document.createElement('a');
+                    $('analysisBtn').textContent =
+                        'Running model…';
 
-                a.href =
-                    URL.createObjectURL(blob);
+                    /*
+                     * Baseline prediction.
+                     *
+                     * No slider values are sent.
+                     * Backend gets the real project
+                     * values from the database.
+                     */
 
-                a.download =
-                    `${p.project_code}_analysis.pdf`;
+                    analysis =
+                        await runAnalysis(
+                            {},
+                            false
+                        );
 
-                a.click();
+                    renderAnalysis();
 
-                URL.revokeObjectURL(a.href);
+                    /*
+                     * Automatically calculate the
+                     * current What-If scenario.
+                     */
 
-            } catch (e) {
-                alert(e.message);
+                    await updateScenario();
 
-            } finally {
-                $('downloadBtn').disabled = false;
-            }
-        };
+                } catch (e) {
+                    console.error(
+                        'Analysis failed:',
+                        e
+                    );
+
+                    alert(
+                        e.message
+                    );
+
+                } finally {
+                    $('analysisBtn').disabled =
+                        false;
+
+                    $('analysisBtn').textContent =
+                        'Get Analysis';
+                }
+            };
+
+        /*
+         * Download PDF
+         */
+
+        $('downloadBtn').onclick =
+            async () => {
+                try {
+                    $('downloadBtn').disabled =
+                        true;
+
+                    /*
+                     * Get the current slider values.
+                     */
+
+                    const currentFeatures =
+                        featureValues();
+
+                    /*
+                     * Build report request.
+                     */
+
+                    const body = {
+                        features:
+                            currentFeatures,
+
+                        scenario:
+                            scenario
+                                ? {
+                                    ...scenario,
+
+                                    features:
+                                        currentFeatures,
+
+                                    manpower:
+                                        Number(
+                                            $('sManpower')
+                                                .value
+                                        ),
+
+                                    original_cost_crore:
+                                        Number(
+                                            $('sBudget')
+                                                .value
+                                        ),
+
+                                    planned_duration_months:
+                                        Number(
+                                            $('sDuration')
+                                                .value
+                                        )
+                                }
+                                : null
+                    };
+
+                    const r =
+                        await fetch(
+                            `/api/projects/${id}/report`,
+                            {
+                                method:
+                                    'POST',
+
+                                headers: {
+                                    'Content-Type':
+                                        'application/json'
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        body
+                                    )
+                            }
+                        );
+
+                    if (!r.ok) {
+                        let message =
+                            'Could not generate PDF';
+
+                        try {
+                            const error =
+                                await r.json();
+
+                            message =
+                                error.message ||
+                                error.detail ||
+                                message;
+
+                        } catch {
+                            /*
+                             * Keep default message
+                             * if response is not JSON.
+                             */
+                        }
+
+                        throw Error(
+                            message
+                        );
+                    }
+
+                    /*
+                     * Convert response into
+                     * downloadable PDF blob.
+                     */
+
+                    const blob =
+                        await r.blob();
+
+                    const a =
+                        document.createElement(
+                            'a'
+                        );
+
+                    a.href =
+                        URL.createObjectURL(
+                            blob
+                        );
+
+                    a.download =
+                        `${p.project_code}_analysis.pdf`;
+
+                    document.body.appendChild(
+                        a
+                    );
+
+                    a.click();
+
+                    a.remove();
+
+                    URL.revokeObjectURL(
+                        a.href
+                    );
+
+                } catch (e) {
+                    console.error(
+                        'PDF generation failed:',
+                        e
+                    );
+
+                    alert(
+                        e.message
+                    );
+
+                } finally {
+                    $('downloadBtn').disabled =
+                        false;
+                }
+            };
 
     } catch (e) {
-        $('loading').textContent = e.message;
+        console.error(
+            'Project loading failed:',
+            e
+        );
+
+        $('loading').textContent =
+            e.message;
     }
 }
+
 
 main();

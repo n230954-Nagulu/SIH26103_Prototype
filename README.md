@@ -74,3 +74,15 @@ python -m uvicorn main:app --host 127.0.0.1 --port 8001
 ```
 
 Open `http://localhost:5000`.
+
+### Unified application
+
+The root Node server is the single application entry point. It serves:
+
+- `/` — the main portfolio dashboard.
+- `/analysis.html` — project selection for AI risk analysis.
+- `/pages/project.html?id=<project-id>` — project intelligence and What-If analysis.
+- `/dashboard/` — the preserved sector explorer dashboard.
+- `/dashboard/src/frontend/...` — the preserved login, registration and assigned-project pages.
+
+Dashboard-only APIs use the `/dashboard-api` namespace so they can coexist with the canonical `/api/projects` and ML analysis routes. Start only the root Node server with `npm start`; the old `dashboard/backend/server.js` is no longer needed for the integrated app.
