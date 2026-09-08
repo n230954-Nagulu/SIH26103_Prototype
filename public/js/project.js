@@ -504,6 +504,40 @@ function renderAnalysis() {
     renderMetrics(
         analysis
     );
+
+    renderShapAnalysis(
+        analysis.shap
+    );
+}
+
+
+function renderShapRows(items) {
+    return (items || []).map(item => {
+        const value = Number(item.contribution);
+        const width = Math.min(100, Math.max(4, Math.abs(value) * 5));
+        const direction = value >= 0 ? 'positive' : 'negative';
+
+        return `<div class="shap-row"><div class="shap-row-head"><b>${esc(item.label)}</b><span>${esc(item.value)}</span><strong class="${direction}">${value >= 0 ? '+' : ''}${value.toFixed(2)}</strong></div><div class="shap-track"><i class="${direction}" style="width:${width}%"></i></div><small>${value >= 0 ? 'Increases' : 'Reduces'} prediction</small></div>`;
+    }).join('');
+}
+
+
+function renderShapInteractions(items) {
+    return (items || []).map(item => {
+        const value = Number(item.contribution);
+        return `<div class="shap-interaction"><span>${esc(item.label)}</span><b class="${value >= 0 ? 'positive' : 'negative'}">${value >= 0 ? '+' : ''}${value.toFixed(2)}</b></div>`;
+    }).join('') || '<p class="muted">No strong interaction found.</p>';
+}
+
+
+function renderShapAnalysis(shap) {
+    if (!shap) return;
+
+    $('shapCost').innerHTML = renderShapRows(shap.cost_overrun?.features);
+    $('shapTime').innerHTML = renderShapRows(shap.time_overrun?.features);
+    $('shapRisk').innerHTML = renderShapRows(shap.risk?.features);
+    $('shapCostInteractions').innerHTML = renderShapInteractions(shap.cost_overrun?.interactions);
+    $('shapTimeInteractions').innerHTML = renderShapInteractions(shap.time_overrun?.interactions);
 }
 
 

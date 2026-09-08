@@ -11,6 +11,7 @@ const dashboardProjectRoutes = require('../dashboard/backend/routes/projectRoute
 const dashboardContractorRoutes = require('../dashboard/backend/routes/contractorRoutes');
 const dashboardOfficerRoutes = require('../dashboard/backend/routes/officerRoutes');
 const dashboardUserProjectRoutes = require('../dashboard/backend/routes/userProjectRoutes');
+const dashboardReportRoutes = require('../dashboard/backend/routes/reportRoutes');
 
 const app = express();
 const publicRoot = path.join(__dirname, '../public');
@@ -28,6 +29,7 @@ app.use('/dashboard-api/projects', dashboardProjectRoutes);
 app.use('/dashboard-api/contractors', dashboardContractorRoutes);
 app.use('/dashboard-api/officer', dashboardOfficerRoutes);
 app.use('/dashboard-api/my-projects', dashboardUserProjectRoutes);
+app.use('/dashboard-api/project-reports', dashboardReportRoutes);
 
 app.get('/', (req, res) => {
 	res.sendFile(path.join(dashboardRoot, 'index.html'));

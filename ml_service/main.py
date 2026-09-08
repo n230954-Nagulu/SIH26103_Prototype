@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 import pandas as pd
 import numpy as np
 import joblib
+import shap
 import os
 
 
@@ -136,6 +137,141 @@ def impact(value):
         return 'Medium'
 
     return 'Low'
+
+
+SHAP_LABELS = {
+    'sector': 'Sector',
+    'implementing_agency': 'Implementing agency',
+    'original_commissioning_month': 'Commissioning month',
+    'original_commissioning_year': 'Commissioning year',
+    'original_cost_crore': 'Original cost',
+    'planned_duration_months': 'Planned duration',
+    'manpower': 'Manpower',
+    'project_scale': 'Project scale',
+    'project_complexity': 'Project complexity',
+    'land_acquisition_risk': 'Land acquisition risk',
+    'clearance_complexity': 'Clearance complexity',
+    'procurement_complexity': 'Procurement complexity',
+    'progress_pct': 'Progress'
+}
+
+
+def _shap_analysis(pipe, x):
+    preprocessor = pipe.named_steps['pre']
+    model = pipe.named_steps['model']
+    transformed = preprocessor.transform(
+        pd.DataFrame([x], columns=FEATURES)
+    )
+
+    if hasattr(transformed, 'toarray'):
+        transformed = transformed.toarray()
+
+    feature_names = preprocessor.get_feature_names_out()
+    feature_groups = {}
+
+    for feature in FEATURES:
+        prefixes = (
+            f'cat__{feature}_',
+            f'num__{feature}'
+        )
+        feature_groups[feature] = [
+            index
+            for index, name in enumerate(feature_names)
+            if name.startswith(prefixes)
+        ]
+
+    explainer = shap.TreeExplainer(model)
+    values = explainer.shap_values(transformed)
+    if isinstance(values, list):
+        values = values[0]
+    values = np.asarray(values)[0]
+
+    contributions = []
+    for feature in FEATURES:
+        indexes = feature_groups[feature]
+        contribution = float(values[indexes].sum()) if indexes else 0.0
+        contributions.append({
+            'feature': feature,
+            'label': SHAP_LABELS[feature],
+            'value': str(x[feature]),
+            'contribution': round(contribution, 4),
+            'direction': 'increases' if contribution >= 0 else 'reduces'
+        })
+
+    contributions.sort(
+        key=lambda item: abs(item['contribution']),
+        reverse=True
+    )
+
+    interactions = []
+    interaction_values = explainer.shap_interaction_values(transformed)
+    if isinstance(interaction_values, list):
+        interaction_values = interaction_values[0]
+    interaction_values = np.asarray(interaction_values)[0]
+
+    for left_index, left in enumerate(FEATURES):
+        for right in FEATURES[left_index + 1:]:
+            left_indexes = feature_groups[left]
+            right_indexes = feature_groups[right]
+            if not left_indexes or not right_indexes:
+                continue
+            contribution = float(
+                interaction_values[np.ix_(left_indexes, right_indexes)].sum()
+            )
+            interactions.append({
+                'label': f'{SHAP_LABELS[left]} + {SHAP_LABELS[right]}',
+                'contribution': round(contribution, 4),
+                'direction': 'increases' if contribution >= 0 else 'reduces'
+            })
+
+    interactions.sort(
+        key=lambda item: abs(item['contribution']),
+        reverse=True
+    )
+
+    return {
+        'features': contributions,
+        'interactions': interactions[:5]
+    }
+
+
+def _combined_risk_analysis(time_analysis, cost_analysis, x, time_months, cost_pct):
+    time_scale = max(1.0, float(x['planned_duration_months']))
+    time_weight = 0.45 if time_months / time_scale < 1 else 0.0
+    cost_weight = 0.55 if cost_pct < 100 else 0.0
+    by_feature = {}
+
+    for item in time_analysis['features']:
+        by_feature[item['feature']] = {
+            'label': item['label'],
+            'value': item['value'],
+            'contribution': item['contribution'] * time_weight / time_scale * 100
+        }
+
+    for item in cost_analysis['features']:
+        entry = by_feature[item['feature']]
+        entry['contribution'] += item['contribution'] * cost_weight
+
+    features = []
+    for feature, item in by_feature.items():
+        contribution = float(item['contribution'])
+        features.append({
+            'feature': feature,
+            'label': item['label'],
+            'value': item['value'],
+            'contribution': round(contribution, 4),
+            'direction': 'increases' if contribution >= 0 else 'reduces'
+        })
+
+    features.sort(
+        key=lambda item: abs(item['contribution']),
+        reverse=True
+    )
+
+    return {
+        'features': features,
+        'interactions': []
+    }
 
 
 def apply_scenario_adjustment(
@@ -310,7 +446,8 @@ def apply_scenario_adjustment(
 def explain(
     x,
     time_months,
-    cost_pct
+    cost_pct,
+    shap_analysis=None
 ):
 
     time_months = max(
@@ -547,6 +684,9 @@ def explain(
         'model_features':
             FEATURES,
 
+        'shap':
+            shap_analysis,
+
         'scenario':
             bool(
                 x.get(
@@ -618,10 +758,25 @@ def predict(p: Payload):
         )
 
 
+        time_shap = _shap_analysis(time_model, model_input)
+        cost_shap = _shap_analysis(cost_model, model_input)
+        shap_analysis = {
+            'cost_overrun': cost_shap,
+            'time_overrun': time_shap,
+            'risk': _combined_risk_analysis(
+                time_shap,
+                cost_shap,
+                x,
+                time_months,
+                cost_pct
+            )
+        }
+
         return explain(
             x,
             time_months,
-            cost_pct
+            cost_pct,
+            shap_analysis
         )
 
 

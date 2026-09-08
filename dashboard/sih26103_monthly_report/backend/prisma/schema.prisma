@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id              String   @id @default(cuid())
+  psId            String   @unique
+  title           String
+  teamName        String
+  institute       String
+  department      String?
+  teamLeader      String
+  contactEmail    String?
+  contactPhone    String?
+  facultyMentor   String?
+  budget          Decimal? @db.Decimal(12,2)
+  expectedEndDate DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  reports         MonthlyReport[]
+}
+
+model MonthlyReport {
+  id                   String   @id @default(cuid())
+  projectId            String
+  reportingMonth       String
+  submissionDate       DateTime @default(now())
+  overallStatus        String
+  completionPercentage Int
+  previousCompletion   Int?
+  plannedSummary       String
+  completedSummary     String
+  pendingSummary       String?
+  technicalProgress    String?
+  technologiesUsed     String?
+  prototypeStatus      String?
+  testingSummary       String?
+  achievements         String?
+  challenges           String?
+  supportRequired      String?
+  nextMonthPlan        String?
+  nextMonthTarget      Int?
+  amountSpentThisMonth Decimal? @db.Decimal(12,2)
+  totalSpentToDate     Decimal? @db.Decimal(12,2)
+  remainingBudget      Decimal? @db.Decimal(12,2)
+  fundingRequired      Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  project              Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  milestones           Milestone[]
+  expenses             Expense[]
+  evidences            Evidence[]
+  @@unique([projectId, reportingMonth])
+  @@index([projectId, reportingMonth])
+}
+
+model Milestone {
+  id             String @id @default(cuid())
+  reportId       String
+  taskName       String
+  plannedPercent Int
+  actualPercent  Int
+  status         String
+  notes          String?
+  report         MonthlyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+}
+
+model Expense {
+  id          String  @id @default(cuid())
+  reportId    String
+  description String
+  category    String
+  amount      Decimal @db.Decimal(12,2)
+  proofUrl    String?
+  report      MonthlyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+}
+
+model Evidence {
+  id          String @id @default(cuid())
+  reportId    String
+  fileName    String
+  fileUrl     String
+  mimeType    String
+  caption     String?
+  report      MonthlyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+}

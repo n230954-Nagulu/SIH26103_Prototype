@@ -363,8 +363,8 @@
             </p>
             <div class="btns-container">
                 <button class="btn btn-primary" id="riskAnalysisBtn"><span>&bull;</span> Risk Analysis</button>
-                <button class="btn btn-primary">Previous Reports</button>
-                <button class="btn btn-primary">Add Report</button>
+                <button class="btn btn-primary" id="previousReportsBtn">Previous Reports</button>
+                <button class="btn btn-primary" id="addReportBtn">Add Report</button>
             </div>
 
         </div>
@@ -393,6 +393,21 @@
 
 
         <div id="projectContent" style="display:none;">
+
+            <section class="project-card" id="submittedReportsSection">
+
+                <div class="project-title" style="margin-bottom: 15px;">
+                    <div>
+                        <h2>Submitted Reports</h2>
+                        <span class="project-id">Monthly progress submissions</span>
+                    </div>
+                </div>
+
+                <div id="submittedReportsList" class="details-grid" style="grid-template-columns: 1fr;">
+                    <div class="detail" style="padding: 18px; color: #64748b;">Loading reports...</div>
+                </div>
+
+            </section>
 
             <section class="project-card">
 

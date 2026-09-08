@@ -75,6 +75,87 @@ router.get("/", (req, res) => {
     });
 });
 
+router.post("/", (req, res) => {
+    const {
+        project_id,
+        project_name,
+        place,
+        state,
+        ministry,
+        sector,
+        project_type,
+        budget,
+        status,
+        progress,
+        expenditure,
+        start_date,
+        end_date,
+        contractor_id,
+        officer_id,
+        implementing_agency,
+        description
+    } = req.body;
+
+    if (!project_id || !project_name || !sector) {
+        return res.status(400).json({ success: false, message: "Project ID, name and sector are required." });
+    }
+
+    const finalContractorId = contractor_id !== undefined && contractor_id !== null && contractor_id !== "" ? Number(contractor_id) : null;
+    const finalOfficerId = officer_id !== undefined && officer_id !== null && officer_id !== "" ? Number(officer_id) : null;
+
+    const sql = `
+        INSERT INTO projects (
+            project_code, name, place, state, ministry, sector, project_type,
+            original_cost_crore, status, progress_pct, expenditure_crore,
+            start_date, end_date, contractor_id, officer_id,
+            implementing_agency, description
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+        RETURNING id, project_code, name
+    `;
+
+    const values = [
+        String(project_id).trim(),
+        String(project_name).trim(),
+        place || null,
+        state || null,
+        ministry || null,
+        String(sector).trim(),
+        project_type || null,
+        budget === "" || budget == null ? 0 : Number(budget),
+        status || "Active",
+        progress === "" || progress == null ? 0 : Number(progress),
+        expenditure === "" || expenditure == null ? 0 : Number(expenditure),
+        start_date || null,
+        end_date || null,
+        finalContractorId,
+        finalOfficerId,
+        implementing_agency || null,
+        description || null
+    ];
+
+    db.query(sql, values, (err, rows) => {
+        if (err) {
+            console.error("CREATE PROJECT ERROR:", err);
+            return res.status(500).json({ success: false, message: "Database error while creating project." });
+        }
+
+        const inserted = Array.isArray(rows) ? rows[0] : (rows && rows.rows ? rows.rows[0] : null);
+
+        res.status(201).json({
+            success: true,
+            message: "Project created successfully.",
+            project: {
+                id: inserted?.id,
+                project_id: inserted?.project_code || project_id,
+                name: inserted?.name || project_name,
+                contractor_id: finalContractorId,
+                officer_id: finalOfficerId
+            }
+        });
+    });
+});
+
 router.get("/:projectId", (req, res) => {
     const projectId = String(req.params.projectId).trim();
     const sql = `

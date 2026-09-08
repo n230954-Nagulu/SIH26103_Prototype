@@ -21,7 +21,7 @@ INSERT INTO projects(project_code,name,place,state,ministry,sector,project_type,
 ('PR-26017','Airport Access Metro','Kolkata','West Bengal','Ministry of Urban Development','Urban Development','Metro',22.5726,88.3639,2,1,'MEGA',6,2019,890,48,'Large',8,'Medium','High','High',510,57,560,72,'High','Active','2019-06-01','2023-05-31','Airport metro access corridor.'),
 ('PR-26018','Offshore Gas Support Base','Kakinada','Andhra Pradesh','Ministry of Petroleum and Natural Gas','Petroleum','Industrial Base',16.9891,82.2475,4,2,'ONGC',1,2021,430,36,'Large',6,'Medium','High','Medium',260,69,310,49,'Medium','Active','2021-01-01','2023-12-31','Support base for offshore operations.'),
 ('PR-26019','Telecom Exchange Modernisation','Patna','Bihar','Ministry of Communications','Telecommunications','Telecom',25.5941,85.1376,5,4,'DOT',3,2024,160,18,'Small',3,'Low','Low','Low',90,38,54,21,'Low','Active','2024-03-01','2025-08-31','Modernization of regional telecom exchange.'),
-('PR-26020','Freight Terminal Development','Nagpur','Maharashtra','Ministry of Railways','Railways','Freight Terminal',21.1458,79.0882,1,2,'NFR',9,2023,470,36,'Large',6,'Medium','Medium','Medium',280,46,180,51,'Medium','Active','2023-09-01','2026-08-31','Rail freight terminal development.')
+('PR-26020','Freight Terminal Development','Nagpur','Maharashtra','Ministry of Railways','Railways','Freight Terminal',21.1458,79.0882,1,2,'NFR',9,2023,470,36,'Large',6,'Medium','Medium','Medium',280,46,180,51,'Medium','Active','2023-09-01','2026-08-31','Rail freight terminal development.'),
 ('PR-26021','Western Freight Logistics Park','Ahmedabad','Gujarat','Ministry of Railways','Railways','Logistics Park',23.0225,72.5714,2,2,'DFCCIL',5,2022,780,42,'Large',7,'Medium','High','Medium',420,63,510,61,'Medium','Active','2022-05-01','2025-10-31','Integrated rail-linked freight logistics park.'),
 
 ('PR-26022','Delhi Ring Road Improvement','New Delhi','Delhi','Ministry of Road Transport and Highways','Road Transport And Highways','Ring Road',28.6139,77.2090,3,3,'NHAI',2,2022,920,36,'Large',8,'High','High','High',530,71,650,58,'Medium','Active','2022-02-01','2025-01-31','Urban ring road capacity and junction improvement.'),
@@ -110,7 +110,7 @@ INSERT INTO projects(project_code,name,place,state,ministry,sector,project_type,
 
 ('PR-26064','Imphal Telecom Resilience Project','Imphal','Manipur','Ministry of Communications','Telecommunications','Network Resilience',24.8170,93.9368,5,1,'BSNL',9,2023,340,36,'Medium',7,'High','High','High',190,48,155,66,'High','Active','2023-09-01','2026-08-31','Telecom network resilience and redundancy project.'),
 
-('PR-26065','Agartala Border Digital Link','Agartala','Tripura','Ministry of Communications','Telecommunications','Digital Connectivity',23.8315,91.2868,1,2,'BSNL',4,2024,250,24,'Medium',5,'Medium','Medium','Medium',150,66,170,37,'Low','Active','2024-04-01','2026-03-31','Border-region digital connectivity improvement.'),
+('PR-26065','Agartala Border Digital Link','Agartala','Tripra','Ministry of Communications','Telecommunications','Digital Connectivity',23.8315,91.2868,1,2,'BSNL',4,2024,250,24,'Medium',5,'Medium','Medium','Medium',150,66,170,37,'Low','Active','2024-04-01','2026-03-31','Border-region digital connectivity improvement.'),
 
 ('PR-26066','Gangtok Hill Road Stabilisation','Gangtok','Sikkim','Ministry of Road Transport and Highways','Road Transport And Highways','Hill Road',27.3389,88.6065,2,3,'BRO',6,2022,430,36,'Large',8,'High','High','High',240,53,235,72,'High','Active','2022-06-01','2025-05-31','Slope stabilization and hill road improvement.'),
 
@@ -137,31 +137,18 @@ INSERT INTO projects(project_code,name,place,state,ministry,sector,project_type,
 ('PR-26077','Bhopal Integrated Sewer Network','Bhopal','Madhya Pradesh','Ministry of Urban Development','Urban Development','Sewerage',23.2599,77.4126,3,2,'BMC',5,2022,520,42,'Large',7,'Medium','High','Medium',320,60,310,46,'Medium','Active','2022-05-01','2025-10-31','Integrated urban sewer network expansion.'),
 
 ('PR-26078','Pune Metro Extension','Pune','Maharashtra','Ministry of Urban Development','Urban Development','Metro',18.5204,73.8567,4,3,'Maha Metro',10,2022,1180,48,'Mega',9,'Medium','High','High',650,68,790,55,'Medium','Active','2022-10-01','2026-09-30','Metro extension with elevated stations and depots.'),
-
 ('PR-26079','Nashik Riverfront Development','Nashik','Maharashtra','Ministry of Urban Development','Urban Development','Riverfront',20.0059,73.7910,5,4,'NMC',3,2024,360,30,'Medium',6,'Medium','High','Medium',220,43,140,48,'Medium','Active','2024-03-01','2026-08-31','Riverfront development and flood resilience works.'),
-
 ('PR-26080','Ahmedabad Metro Depot Expansion','Ahmedabad','Gujarat','Ministry of Urban Development','Urban Development','Metro Depot',23.0225,72.5714,1,1,'GMRC',7,2023,430,30,'Large',6,'Low','Medium','Medium',240,72,310,31,'Low','Active','2023-07-01','2025-12-31','Metro maintenance depot and operational support infrastructure.'),
-
 ('PR-26081','Surat Flood Resilience Corridor','Surat','Gujarat','Ministry of Jal Shakti','Water Resources','Flood Protection',21.1702,72.8311,2,2,'SUDA',12,2022,570,36,'Large',7,'Medium','High','Medium',300,58,350,51,'Medium','Active','2022-12-01','2025-11-30','Urban flood management and drainage resilience corridor.'),
-
 ('PR-26082','Rajkot Water Reuse Plant','Rajkot','Gujarat','Ministry of Jal Shakti','Water Resources','Water Treatment',22.3039,70.8022,3,3,'GWSSB',4,2024,260,24,'Medium',5,'Low','Medium','Low',160,63,175,29,'Low','Active','2024-04-01','2026-03-31','Treated wastewater reuse and recycling facility.'),
-
 ('PR-26083','Vijayawada Flood Control Works','Vijayawada','Andhra Pradesh','Ministry of Jal Shakti','Water Resources','Flood Protection',16.5062,80.6480,4,4,'APWRD',8,2023,420,30,'Large',7,'Medium','High','Medium',250,71,300,36,'Low','Active','2023-08-01','2026-01-31','Flood control structures and riverbank protection.'),
-
 ('PR-26084','Tirupati Airport Expansion','Tirupati','Andhra Pradesh','Ministry of Civil Aviation','Civil Aviation','Airport',13.6288,79.4192,5,1,'AAI',5,2022,520,36,'Large',7,'Medium','High','High',280,67,340,48,'Medium','Active','2022-05-01','2025-04-30','Terminal expansion and airside infrastructure upgrade.'),
-
 ('PR-26085','Rajahmundry Airport Upgrade','Rajahmundry','Andhra Pradesh','Ministry of Civil Aviation','Civil Aviation','Airport',16.9891,81.7840,1,2,'AAI',10,2023,380,30,'Medium',6,'Low','Medium','Medium',210,55,210,42,'Medium','Active','2023-10-01','2026-03-31','Passenger terminal and runway support improvements.'),
-
 ('PR-26086','Coimbatore Airport Expansion','Coimbatore','Tamil Nadu','Ministry of Civil Aviation','Civil Aviation','Airport',11.0168,76.9558,2,3,'AAI',2,2021,890,42,'Large',8,'Medium','High','High',460,73,650,54,'Medium','Active','2021-02-01','2024-07-31','Airport terminal and runway expansion.'),
-
 ('PR-26087','Madurai Airport Terminal Upgrade','Madurai','Tamil Nadu','Ministry of Civil Aviation','Civil Aviation','Airport',9.9252,78.1198,3,4,'AAI',6,2024,340,24,'Medium',5,'Low','Medium','Medium',190,46,150,37,'Low','Active','2024-06-01','2026-05-31','Terminal modernization and passenger facility improvement.'),
-
 ('PR-26088','Bhubaneswar Airport Cargo Complex','Bhubaneswar','Odisha','Ministry of Civil Aviation','Civil Aviation','Cargo Terminal',20.2961,85.8245,4,1,'AAI',9,2023,290,24,'Medium',5,'Low','Medium','Low',160,79,230,24,'Low','Active','2023-09-01','2025-08-31','Air cargo handling and storage complex.'),
-
 ('PR-26089','Guwahati Airport Terminal Expansion','Guwahati','Assam','Ministry of Civil Aviation','Civil Aviation','Airport',26.1445,91.7362,5,2,'AAI',3,2022,1120,48,'Mega',8,'High','High','High',580,52,720,77,'High','Active','2022-03-01','2026-02-28','Airport terminal and passenger processing expansion.'),
-
 ('PR-26090','Dibrugarh Airport Runway Upgrade','Dibrugarh','Assam','Ministry of Civil Aviation','Civil Aviation','Runway',27.4728,94.9120,1,3,'AAI',7,2024,240,18,'Small',4,'Low','Medium','Low',130,69,165,30,'Low','Active','2024-07-01','2025-12-31','Runway strengthening and airport safety improvements.'),
-
 ('PR-26091','Bengaluru Cancer Care Centre','Bengaluru','Karnataka','Ministry of Health and Family Welfare','Health And Family Welfare','Hospital',12.9716,77.5946,2,4,'HSCC',11,2023,580,36,'Large',6,'Low','Medium','Medium',340,62,370,34,'Low','Active','2023-11-01','2026-10-31','Specialized cancer treatment and research hospital.'),
 
 ('PR-26092','Chennai Medical Research Campus','Chennai','Tamil Nadu','Ministry of Health and Family Welfare','Health And Family Welfare','Research Facility',13.0827,80.2707,3,1,'HSCC',4,2022,760,48,'Large',8,'Medium','High','High',430,50,360,61,'High','Active','2022-04-01','2026-03-31','Medical research and advanced healthcare campus.'),
@@ -183,46 +170,38 @@ INSERT INTO projects(project_code,name,place,state,ministry,sector,project_type,
 ('PR-26100','Ranchi Railway Yard Modernisation','Ranchi','Jharkhand','Ministry of Railways','Railways','Rail Yard',23.3441,85.3096,1,1,'SER',10,2024,420,30,'Large',6,'Medium','Medium','Medium',250,45,180,47,'Medium','Active','2024-10-01','2027-03-31','Rail yard modernization and operational capacity improvement.'),
 
 ('PR-26101','Bikaner Rail Freight Terminal','Bikaner','Rajasthan','Ministry of Railways','Railways','Freight Terminal',28.0229,73.3119,2,2,'NWR',3,2022,390,30,'Medium',6,'Low','Medium','Medium',220,82,330,26,'Low','Active','2022-03-01','2024-08-31','Dedicated rail freight terminal and loading facilities.'),
-
 ('PR-26102','Kharagpur Rail Workshop Upgrade','Kharagpur','West Bengal','Ministry of Railways','Railways','Workshop',22.3460,87.2320,3,3,'SER',8,2023,450,36,'Large',7,'Medium','High','Medium',260,53,245,50,'Medium','Active','2023-08-01','2026-07-31','Rail workshop modernization and maintenance facilities.'),
-
 ('PR-26103','Ramagundam Power Plant Upgrade','Ramagundam','Telangana','Ministry of Power','Power','Power Plant',18.7557,79.4748,4,4,'NTPC',1,2022,860,42,'Large',8,'Low','High','High',420,69,610,57,'Medium','Active','2022-01-01','2025-06-30','Thermal power plant efficiency and equipment upgrade.'),
-
 ('PR-26104','Korba Thermal Efficiency Upgrade','Korba','Chhattisgarh','Ministry of Power','Power','Power Plant',22.3595,82.7501,5,1,'NTPC',5,2023,690,36,'Large',7,'Medium','High','Medium',330,61,390,48,'Medium','Active','2023-05-01','2026-04-30','Thermal plant efficiency and emission control upgrade.'),
-
 ('PR-26105','Talcher Power Expansion','Talcher','Odisha','Ministry of Power','Power','Power Plant',20.9490,85.2167,1,2,'NTPC',11,2021,1260,48,'Mega',9,'High','High','High',610,50,720,75,'High','Active','2021-11-01','2025-10-31','Power generation capacity expansion.'),
-
 ('PR-26106','Kudgi Solar Hybrid Project','Vijayapura','Karnataka','Ministry of New and Renewable Energy','Renewable Energy','Hybrid Energy',16.8302,75.7100,2,3,'NTPC',7,2024,730,42,'Large',8,'Medium','Medium','Medium',350,37,190,56,'Medium','Active','2024-07-01','2027-12-31','Hybrid solar and renewable energy generation facility.'),
-
 ('PR-26107','Mangalore LNG Support Infrastructure','Mangaluru','Karnataka','Ministry of Petroleum and Natural Gas','Petroleum','LNG Infrastructure',12.9141,74.8560,3,4,'GAIL',12,2022,940,42,'Large',8,'Medium','High','High',470,65,590,63,'High','Active','2022-12-01','2026-05-31','LNG handling and supporting pipeline infrastructure.'),
-
 ('PR-26108','Kandla LPG Storage Expansion','Kandla','Gujarat','Ministry of Petroleum and Natural Gas','Petroleum','Storage Expansion',23.0330,70.2167,4,1,'HPCL',4,2024,310,24,'Medium',5,'Low','Medium','Low',180,72,230,29,'Low','Active','2024-04-01','2026-03-31','LPG storage capacity expansion.'),
-
 ('PR-26109','Jodhpur Defence Water Supply','Jodhpur','Rajasthan','Ministry of Defence','Defence Production','Water Infrastructure',26.2389,73.0243,5,2,'MES',9,2023,280,24,'Medium',5,'Low','Medium','Low',160,68,195,25,'Low','Active','2023-09-01','2025-08-31','Dedicated water supply infrastructure for defence facilities.'),
-
 ('PR-26110','Visakhapatnam Industrial Corridor','Visakhapatnam','Andhra Pradesh','Ministry of Commerce and Industry','Industrial Corridors','Industrial Corridor',17.6868,83.2185,1,3,'NICDC',2,2021,1480,54,'Mega',9,'High','High','High',720,54,810,70,'High','Active','2021-02-01','2025-07-31','Industrial corridor infrastructure and logistics integration.'),
-
 ('PR-26111','Dholera Industrial Corridor Package','Ahmedabad','Gujarat','Ministry of Commerce and Industry','Industrial Corridors','Industrial Corridor',22.2442,72.1934,2,4,'NICDC',6,2022,1720,60,'Mega',10,'High','High','High',820,49,760,78,'High','Active','2022-06-01','2027-05-31','Industrial township and corridor infrastructure.'),
-
 ('PR-26112','Amritsar Integrated Food Park','Amritsar','Punjab','Ministry of Food Processing Industries','Food Processing','Food Park',31.6340,74.8723,3,1,'MoFPI',10,2024,320,30,'Medium',5,'Medium','Medium','Low',180,43,130,35,'Low','Active','2024-10-01','2027-03-31','Integrated food processing and cold-chain facility.'),
-
 ('PR-26113','Mysuru Heritage Tourism Circuit','Mysuru','Karnataka','Ministry of Tourism','Tourism','Tourism Infrastructure',12.2958,76.6394,4,2,'KSTDC',4,2023,260,24,'Medium',4,'Low','Medium','Low',140,81,200,19,'Low','Active','2023-04-01','2025-03-31','Tourism infrastructure connecting heritage destinations.'),
-
 ('PR-26114','Nagpur Integrated Logistics Terminal','Nagpur','Maharashtra','Ministry of Railways','Railways','Logistics Terminal',21.1458,79.0882,5,3,'NFR',7,2024,510,36,'Large',7,'Medium','Medium','Medium',310,42,195,49,'Medium','Active','2024-07-01','2027-06-30','Integrated freight handling and logistics terminal.'),
-
 ('PR-26115','Coimbatore Industrial Freight Hub','Coimbatore','Tamil Nadu','Ministry of Commerce and Industry','Industrial Corridors','Freight Hub',11.0168,76.9558,1,4,'NICDC',3,2023,680,42,'Large',7,'Medium','High','Medium',360,64,410,46,'Medium','Active','2023-03-01','2026-08-31','Industrial freight consolidation and distribution hub.'),
-
 ('PR-26116','Kochi Coastal Logistics Park','Kochi','Kerala','Ministry of Ports, Shipping and Waterways','Shipping And Ports','Logistics Park',9.9312,76.2673,2,1,'Cochin Port Authority',9,2024,570,36,'Large',6,'Low','High','Medium',280,45,220,43,'Medium','Active','2024-09-01','2027-08-31','Coastal logistics and cargo distribution facility.'),
-
 ('PR-26117','Bhopal Solar Transmission Link','Bhopal','Madhya Pradesh','Ministry of Power','Power','Transmission',23.2599,77.4126,3,2,'PGCIL',5,2024,480,30,'Large',6,'Medium','Medium','Medium',240,51,210,38,'Low','Active','2024-05-01','2026-10-31','Transmission link for renewable power integration.'),
-
 ('PR-26118','Rajasthan Highway Safety Upgrade','Ajmer','Rajasthan','Ministry of Road Transport and Highways','Road Transport And Highways','Highway Safety',26.4499,74.6399,4,3,'NHAI',8,2023,390,24,'Medium',5,'Low','Medium','Low',190,77,290,23,'Low','Active','2023-08-01','2025-07-31','Road safety improvements, barriers and junction upgrades.'),
-
 ('PR-26119','Bihar Rural Bridge Network','Muzaffarpur','Bihar','Ministry of Road Transport and Highways','Road Transport And Highways','Bridge Network',26.1209,85.3647,5,4,'Bihar Road Construction Department',2,2024,620,42,'Large',8,'High','High','Medium',350,46,245,67,'High','Active','2024-02-01','2027-07-31','Multiple bridge structures improving rural connectivity.'),
-
 ('PR-26120','Assam River Logistics Terminal','Dibrugarh','Assam','Ministry of Ports, Shipping and Waterways','Inland Waterways','River Logistics Terminal',27.4728,94.9120,1,1,'IWAI',11,2023,430,30,'Large',7,'High','High','Medium',240,59,270,55,'Medium','Active','2023-11-01','2026-04-30','River-based logistics terminal for regional cargo movement.')
 
-ON CONFLICT(project_code) DO NOTHING; ON CONFLICT(project_code) DO NOTHING;
+ON CONFLICT(project_code) DO NOTHING;
+
+-- Assign 25 varied existing projects to Officer 1: Ananya Rao.
+UPDATE projects
+SET officer_id = 1
+WHERE project_code IN (
+	'PR-26001','PR-26006','PR-26012','PR-26018','PR-26024',
+	'PR-26030','PR-26036','PR-26042','PR-26048','PR-26054',
+	'PR-26060','PR-26066','PR-26072','PR-26078','PR-26084',
+	'PR-26090','PR-26096','PR-26102','PR-26108','PR-26114',
+	'PR-26110','PR-26111','PR-26113','PR-26117','PR-26120'
+);
 INSERT INTO site_photos(project_id,photo_url,caption,captured_at) SELECT id,'/assets/photos/site-01.svg','Site progress evidence','2026-01-15' FROM projects WHERE project_code IN ('PR-26001','PR-26004','PR-26012');
 INSERT INTO site_photos(project_id,photo_url,caption,captured_at) SELECT id,'/assets/photos/site-02.svg','Construction milestone','2026-03-12' FROM projects WHERE project_code IN ('PR-26002','PR-26008','PR-26015');
 INSERT INTO site_photos(project_id,photo_url,caption,captured_at) SELECT id,'/assets/photos/site-03.svg','Field inspection evidence','2026-05-20' FROM projects WHERE project_code IN ('PR-26005','PR-26009','PR-26020');

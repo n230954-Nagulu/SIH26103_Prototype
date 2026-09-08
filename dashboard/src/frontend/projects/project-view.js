@@ -157,6 +157,8 @@ async function loadProject() {
 
 function displayProject(project) {
 
+    loadSubmittedReports(project);
+
     setText(
         "projectName",
         project.name
@@ -368,6 +370,16 @@ const riskAnalysisButton =
         "riskAnalysisBtn"
     );
 
+const addReportButton =
+    document.getElementById(
+        "addReportBtn"
+    );
+
+const previousReportsButton =
+    document.getElementById(
+        "previousReportsBtn"
+    );
+
 if (riskAnalysisButton) {
     riskAnalysisButton.addEventListener(
         "click",
@@ -382,4 +394,106 @@ if (riskAnalysisButton) {
                 `/pages/project-analysis.html?id=${encodeURIComponent(projectId)}`;
         }
     );
+}
+
+if (addReportButton) {
+    addReportButton.addEventListener(
+        "click",
+        () => {
+            const projectId = getProjectId();
+
+            if (!projectId) {
+                alert("Project ID is missing.");
+                return;
+            }
+
+            const projectViewUrl = window.location.href;
+            const reportUrl = `project-report.html?id=${encodeURIComponent(projectId)}&returnUrl=${encodeURIComponent(projectViewUrl)}`;
+
+            window.location.href = reportUrl;
+        }
+    );
+}
+
+if (previousReportsButton) {
+    previousReportsButton.addEventListener(
+        "click",
+        () => {
+            const section = document.getElementById("submittedReportsSection");
+
+            if (section) {
+                section.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }
+    );
+}
+
+async function loadSubmittedReports(project) {
+    const listEl = document.getElementById("submittedReportsList");
+
+    if (!listEl) {
+        return;
+    }
+
+    try {
+        const projectId = project?.id ?? project?.project_id ?? getProjectId();
+
+        if (!projectId) {
+            listEl.innerHTML = '<div class="detail" style="padding: 18px; color: #64748b;">No project selected.</div>';
+            return;
+        }
+
+        const reportsResponse = await fetch(`/dashboard-api/project-reports?projectId=${encodeURIComponent(projectId)}`);
+
+        if (!reportsResponse.ok) {
+            throw new Error("Reports could not be loaded.");
+        }
+
+        const data = await reportsResponse.json();
+        const reports = Array.isArray(data?.reports) ? data.reports : [];
+
+        if (reports.length === 0) {
+            listEl.innerHTML = '<div class="detail" style="padding: 18px; color: #64748b;">No reports submitted yet.</div>';
+            return;
+        }
+
+        listEl.innerHTML = reports.map((report) => `
+            <div class="detail" style="padding: 18px;">
+                <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:10px; flex-wrap:wrap;">
+                    <strong>${escapeHtml(report.reportingMonth || "Month")}</strong>
+                    <span class="status ${getStatusClass(report.overallStatus || "On Track")}">${escapeHtml(report.overallStatus || "On Track")}</span>
+                </div>
+                <p style="margin-bottom:8px; color:#475569;">Completion: <strong>${report.completionPercentage ?? 0}%</strong></p>
+                <p style="margin-bottom:8px; color:#475569;">Planned: ${escapeHtml(report.plannedSummary || "-")}</p>
+                <p style="color:#475569;">Completed: ${escapeHtml(report.completedSummary || "-")}</p>
+            </div>
+        `).join("");
+
+    } catch (error) {
+        console.error("Failed to load submitted reports:", error);
+        listEl.innerHTML = '<div class="detail" style="padding: 18px; color: #64748b;">No reports submitted yet.</div>';
+    }
+}
+
+function getStatusClass(status) {
+    const value = (status || "").toLowerCase();
+
+    if (value.includes("delay") || value.includes("hold")) {
+        return "delayed";
+    }
+
+    if (value.includes("complete") || value.includes("done")) {
+        return "completed";
+    }
+
+    return "ongoing";
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }

@@ -797,26 +797,29 @@ addProjectBtn.addEventListener(
     "click",
     () => {
 
-        const user =
-            getLoggedInUser();
+        const user = getLoggedInUser();
 
-
-        if (
-            !user ||
-            user.role !== "government"
-        ) {
-
-            alert(
-                "Only government officers can add projects."
-            );
-
+        if (!user) {
+            alert("Please login to add a project.");
+            window.location.href = "../login/login.html";
             return;
         }
 
+        if (user.role !== "government" && user.role !== "contractor") {
+            alert("Only government officers and contractors can add projects.");
+            return;
+        }
 
-        window.location.href =
-            "../project-details/project-details.html";
+        const role = user.role;
+        const contractorId = user.user?.contractor_id || user.user?.contractorId || "";
+        const officerId = user.user?.officer_id || "";
 
+        const params = new URLSearchParams();
+        params.set("role", role);
+        if (contractorId) params.set("contractorId", contractorId);
+        if (officerId) params.set("officerId", officerId);
+
+        window.location.href = `add-project.html?${params.toString()}`;
     }
 );
 

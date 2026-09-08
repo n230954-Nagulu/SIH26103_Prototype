@@ -1,7 +1,24 @@
 {
-  "name":"sih26103-geospatial-intelligence",
-  "version":"2.0.0","private":true,"description":"AI Government Project Tracker - Geo-Spatial Intelligence with PostgreSQL and ML",
-  "scripts":{"start":"node backend/server.js","dev":"nodemon backend/server.js"},
-  "dependencies":{"cors":"^2.8.5","dotenv":"^17.2.2","express":"^5.1.0","helmet":"^8.1.0","morgan":"^1.10.0","pg":"^8.16.3","pdfkit":"^0.17.2","axios":"^1.11.0"},
-  "devDependencies":{"nodemon":"^3.1.10"}
+  "name": "sih26103-geospatial-intelligence",
+  "version": "2.0.0",
+  "private": true,
+  "description": "AI Government Project Tracker - Geo-Spatial Intelligence with PostgreSQL and ML",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.0",
+    "multer": "^2.3.0",
+    "pdfkit": "^0.17.2",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
 }

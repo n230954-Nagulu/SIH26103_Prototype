@@ -6,11 +6,12 @@
 
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 
     background: #FAFAF8;
 
     color: #14213D;
+    font-size: 16px;
 }
 
 
@@ -163,7 +164,7 @@ body {
 
 .brand h2 {
 
-    font-size: 18px;
+    font-size: 21px;
 
     margin-bottom: 4px;
 }
@@ -171,7 +172,7 @@ body {
 
 .brand span {
 
-    font-size: 12px;
+    font-size: 14px;
 
     color: #ffffff;
 }
