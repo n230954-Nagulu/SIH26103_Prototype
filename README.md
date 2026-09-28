@@ -16,16 +16,19 @@ Updated prototype for the Government Project Tracker / Geo-Spatial Intelligence 
 The previous supplied serialized models have been removed from the active pipeline.
 
 The new Python service uses two newly trained regression models:
+
 - `time_overrun_model.pkl` — Random Forest regression for predicted delay in months.
 - `cost_overrun_model.pkl` — Gradient Boosting regression for predicted cost overrun percentage.
 
 Training data:
+
 - `ml_service/data/project_risk_training_900.csv` — 900 rows.
 - The dataset is **public-data-calibrated and augmented**, not 900 independently verified government records. Calibration anchors use published Indian central-sector project observations from MoSPI/PAIMANA and parliamentary statements; controlled augmentation was used to create enough training rows for a stable SIH prototype model.
 - `ml_service/data/TRAINING_PROVENANCE.md` documents the sources and limitation.
 - Validation metrics are stored in `ml_service/data/metrics.txt`.
 
 The model accepts project context plus manpower, budget, planned duration and current progress. The service returns:
+
 - Total risk (0–100)
 - Risk level
 - Cost overrun %
@@ -38,6 +41,7 @@ The model accepts project context plus manpower, budget, planned duration and cu
 ## What-If simulator
 
 Only three controls are exposed:
+
 - Manpower slider
 - Budget slider
 - Planned time slider
@@ -73,7 +77,7 @@ python -m pip install --only-binary=:all: -r requirements.txt
 python -m uvicorn main:app --host 127.0.0.1 --port 8001
 ```
 
-Open `http://localhost:5000`.
+Open `http://localhost:3000` when using the supplied `.env.example` defaults.
 
 ### Unified application
 

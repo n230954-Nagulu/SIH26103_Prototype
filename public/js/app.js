@@ -244,7 +244,7 @@ function renderMap() {
     if (group.length) {
         map.fitBounds(group, {
             padding: [35, 35],
-            maxZoom: 6
+            maxZoom: 8
         });
     }
 
@@ -388,15 +388,24 @@ function init() {
     }
 
     map = L
-        .map('portfolioMap')
-        .setView([22.5, 79], 3);
+        .map('portfolioMap', {
+            zoomControl: false,
+            zoomSnap: 0.5,
+            zoomDelta: 0.5
+        })
+        .setView([22.5, 79], 4);
 
     L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
         {
-            attribution: '© OpenStreetMap contributors'
+            attribution:
+                'Tiles &copy; Esri, HERE, Garmin, USGS, Intermap, increment P Corp. and the GIS user community',
+            maxZoom: 19
         }
     ).addTo(map);
+
+    L.control.zoom({ position: 'topright' }).addTo(map);
+    L.control.scale({ imperial: false }).addTo(map);
 
     $('closeMapDetails').onclick = closeDrawer;
 

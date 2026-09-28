@@ -351,6 +351,16 @@
 </div>
 
 
+<script>
+    window.__APP_CONFIG__ = window.__APP_CONFIG__ || {};
+    const host = window.location.hostname;
+    window.__APP_CONFIG__.API_BASE_URL = window.__APP_CONFIG__.API_BASE_URL || (
+        host === 'localhost' || host === '127.0.0.1'
+            ? ''
+            : (window.location.origin || '')
+    );
+</script>
+
 <script src="login.js"></script>
 
 </body>

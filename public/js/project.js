@@ -191,22 +191,30 @@ function render() {
         '<div class="empty">No site photos registered.</div>';
 
     pm = L
-        .map('projectMap')
+        .map('projectMap', {
+            zoomControl: false,
+            zoomSnap: 0.5,
+            zoomDelta: 0.5
+        })
         .setView(
             [
                 Number(p.latitude),
                 Number(p.longitude)
             ],
-            8
+            10
         );
 
     L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
         {
             attribution:
-                '© OpenStreetMap contributors'
+                'Tiles &copy; Esri, HERE, Garmin, USGS, Intermap, increment P Corp. and the GIS user community',
+            maxZoom: 19
         }
     ).addTo(pm);
+
+    L.control.zoom({ position: 'topright' }).addTo(pm);
+    L.control.scale({ imperial: false }).addTo(pm);
 
     L.marker([
         Number(p.latitude),

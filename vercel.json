@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dashboard/index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dashboard/assets/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dashboard/css/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dashboard/js/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dashboard/dist/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dashboard/src/frontend/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/api/projects/(.*)", "dest": "/api/projects/$1" },
+    { "src": "/api/ml/(.*)", "dest": "/api/ml/$1" },
+    { "src": "/dashboard-api/(.*)", "dest": "/api/dashboard-api/$1" },
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "^/dashboard/?$", "dest": "/dashboard/index.html" },
+    { "src": "/dashboard/(.*)", "dest": "/dashboard/$1" },
+    { "src": "/(.*)", "dest": "/public/$1" }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
